@@ -11,12 +11,12 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 socketio = SocketIO(app)
 
 USER_SIGNED_IN = 'user_signed_in'
-
+DEFAULT_CHATS  = [ 'spam1', 'spam2' ]
 
 @app.route("/")
 def index():
 
-    return render_template('_home.html')
+    return render_template('_home.html', chats=DEFAULT_CHATS)
 
 
 @app.route("/signin", methods=['POST'])
@@ -24,7 +24,8 @@ def signin():
 
     username = request.form.get('userid')
     session[USER_SIGNED_IN] = username
-    return render_template('_home.html')
+
+    return render_template('_home.html', chats=DEFAULT_CHATS)
 
 
 @app.route("/signout", methods=['POST'])
