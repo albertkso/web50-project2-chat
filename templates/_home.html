@@ -1,0 +1,22 @@
+{% extends 'boilerplate.html' %}
+
+{% block signin %}
+
+    {% if not session.user_signed_in %}
+
+        <form action='/signin' method='post'>
+            <label for='userid'>
+                <span> username </span> <input id='userid' name='userid' type='text'/>
+            </label>
+            <button>Submit</button>
+        </form>
+
+    {% else %}
+
+        <form action='/signout' method='post'>
+            <span> {{ session.user_signed_in }} </span> <button>Sign Out</button>
+        </form>
+
+    {% endif %}
+
+{% endblock %}
