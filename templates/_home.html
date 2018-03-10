@@ -4,8 +4,17 @@
 
     {% if session.user_signed_in %}
 
-        <ul>
-            {% for menuitem in chats %} <li> {{ menuitem }} </li> {% endfor %}
+        <h2> Chat Channels </h2>
+
+        <form class='channel_form'>
+            <input type='text' id='channel' name='channel'>
+            <button id='add'> Go </button>
+        </form>
+
+        <ul id='channels'> 
+            {% for menuitem in chats %} 
+                <li> {{ menuitem }} </li>
+            {% endfor %}
         </ul>
 
     {% endif %}
@@ -17,18 +26,18 @@
     {% if session.user_signed_in %}
 
         <h1> my spam </h1>
-        <form action='/signout' method='post'>
+        <form id='signout_form' action='/signout' method='post'>
             <span> display name: {{ session.user_signed_in }} </span> <button>Logout</button>
         </form>
 
     {% else %}
 
         <h1> my spam </h1>
-        <form action='/signin' method='post'>
-            <label for='userid'>
+        <form id='signin_form' action='/signin' method='post'>
+            <label for='user_id'>
                 <span> display name: </span> <input id='userid' name='userid' type='text'/>
             </label>
-            <button>Enter</button>
+            <button> Go </button>
         </form>
 
     {% endif %}

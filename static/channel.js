@@ -1,31 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.channel_form').onclick = () => {
+    document.querySelector('#add').onclick = () => {
 
-        // Initialize new request
+        const data = new FormData();
+        const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
-        const channel = document.querySelector('#channel').value;
-        request.open('POST', '/load_config');
 
-        // Callback function for when request completes
+        data.append('channel', channelName);
+
+        request.open('POST', '/manage_channels');
+
         request.onload = () => {
-
-            // Extract JSON data from request
             const data = JSON.parse(request.responseText);
-
-            // Update the result div
             if (data.success) {
-                console.log(data)
+                console.log(channel)
+                const channelsList = document.querySelector('#channels');
+                const newChannel = document.createElement('li');
+                newChannel.innerHTML = channelName;
+                channelsList.appendChild(newChannel);
             }
-            else {
-            }
-            
         }
 
-        // Add data to send with request
-        const data = new FormData();
-        data.append('channel', channel);
-
-        // Send request
         request.send(data);
         return false;
     };
