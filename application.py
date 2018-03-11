@@ -51,10 +51,16 @@ def manage_channels():
     return jsonify(success=success, channel=channel)
 
 
-@socketio.on('client send')
+@socketio.on('client send message')
 def handle_message(message):
 
     emit('server broadcast', message, broadcast=True)
+
+
+@socketio.on('client select channel')
+def handle_channel(message):
+
+    print('select channel notification received')
 
 
 def _is_signed_in(username):

@@ -26,12 +26,12 @@
 
         <form class='channel_form'>
             <input type='text' id='channel' name='channel'>
-            <button id='add'> Go </button>
+            <button id='add_channel'> Go </button>
         </form>
 
         <ul id='channels'> 
             {% for menuitem in channels_list %} 
-                <li> {{ menuitem }} </li>
+                <li class='channel_item'> {{ menuitem }} </li>
             {% endfor %}
         </ul>
 
@@ -42,12 +42,10 @@
 {% block main %}
 
     <div class='title'></div>
-    <div class='content'>
-        <ul id='messages'></ul>
-    </div>
+    <div class='content'></div>
     <div class='message_form'>
         <form id='message_form' method='post'>
-            <input id='message' type='text'/> <button id='send'> Send </button>
+            <input id='message' type='text'/> <button id='send_message'> Send </button>
         </form>
     </div>
 
@@ -59,7 +57,9 @@
 
         <h1> my spam </h1>
         <form id='signout_form' action='/signout' method='post'>
-            <span> display name: {{ session.user_signed_in }} </span> <button>Logout</button>
+            <span> display name: </span>
+            <span id='current_user'> {{ session.user_signed_in }} </span>
+            <button> Logout </button>
         </form>
 
     {% else %}

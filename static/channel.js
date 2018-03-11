@@ -41,24 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = document.querySelector('#message').value;
 
         message_parameters = { channel : channel, sender: sender, message: message }
-        socket.emit('client send', message_parameters)
+        socket.emit('client send message', message_parameters)
         document.querySelector('#message').value = "";
 
         return false;
     }
 
     document.querySelector('#channels').onclick = (evt) => {
-        if (evt.target.tagName != 'LI') {
+        if (evt.target.tagName != 'LI')
             return;
-        }
- 
-        const channelItems = document.querySelectorAll('.channel_item');
-        for (i = 0; i < channelItems.length; i++) {
-            channelItems[i].style.fontWeight = 'normal';
+
+        const activeChannel = evt.target;
+        const channelName = activeChannel.innerText;
+        const allChannels = document.querySelectorAll('.channel_item');
+        const sender = document.getElementById('current_user').innerText;
+
+        for (i = 0; i < allChannels.length; i++) {
+            allChannels[i].style.fontWeight = 'normal';
         }
 
-        const listElement = evt.target;
-        listElement.style.fontWeight = 'bold';
+        activeChannel.style.fontWeight = 'bold';
+
+        message_parameters = { channel : channelName, sender: sender }
+        socket.emit('client select channel', message_parameters)
     }
 
 })
