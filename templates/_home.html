@@ -42,10 +42,12 @@
 {% block main %}
 
     <div class='title'></div>
-    <div class='content'></div>
-    <div class='message'>
-        <form id='message' method='post'>
-            <input type='text'/> <button> Send </button>
+    <div class='content'>
+        <ul id='messages'></ul>
+    </div>
+    <div class='message_form'>
+        <form id='message_form' method='post'>
+            <input id='message' type='text'/> <button id='send'> Send </button>
         </form>
     </div>
 

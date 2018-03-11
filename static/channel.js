@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#add').onclick = () => {
 
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+    socket.on('server broadcast', data => {
+        const li = document.createElement('li');
+        li.innerHTML = `${data.subject} ${data.message}`;
+        document.querySelector('#messages').append(li);
+    });
+
+    document.querySelector('#add').onclick = () => {
         const data = new FormData();
         const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
@@ -23,4 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         request.send(data);
         return false;
     };
+
+    document.querySelector('#send').onclick = () => {
+        const message = document.querySelector('#message').value;
+        socket.emit('client send', { subject: 'subject', message: message })
+        return false;
+    }
+
 })

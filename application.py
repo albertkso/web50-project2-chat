@@ -51,6 +51,12 @@ def manage_channels():
     return jsonify(success=success, channel=channel)
 
 
+@socketio.on('client send')
+def handle_message(message):
+
+    emit('server broadcast', message, broadcast=True)
+
+
 def _is_signed_in(username):
 
     if not logged_in_key in session:
