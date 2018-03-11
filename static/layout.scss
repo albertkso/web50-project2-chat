@@ -3,7 +3,9 @@ $primary-color:      rgb(130, 135, 135);
 $primary-font-color: hsl(0, 0, 100%);
 $secondary-color:    hsl(181, 40%, 95%);
 
-$section-padding: 0 1em 0 1em;
+$section-vertical-padding: 0.5em;
+$section-side-padding: 0.5em;
+
 $heading-margin: 0.25em;
 $table-margin: 0.25em;
 
@@ -32,7 +34,6 @@ body {
 }
 
 .main {
-    grid-row: 2/3;
     grid-column: 2/3;
     background-color: $secondary-color;
 }
@@ -51,11 +52,29 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $section-padding;
+    padding: $section-vertical-padding $section-side-padding;
 }
 
-section {
-    padding: $section-padding;
+.main {
+    padding: $section-vertical-padding $section-side-padding;
+    display: grid;
+    grid-template-rows: 1fr 4fr 0.5fr;
+    grid-gap: 0.5em;
+
+    .title {
+        background-color: white;
+        grid-row: 1/2;
+    }
+
+    .content {
+        background-color: white;
+        grid-row: 2/3;
+    }
+
+    .message {
+        grid-row: 3/4;
+    }
+
 }
 
 footer {
@@ -66,7 +85,7 @@ footer {
 }
 
 form {
-    input, label, span { 
+    button, input, label, span { 
         display: inline-block;
     }
     
@@ -83,4 +102,19 @@ form {
         font-size: 100%;
         margin: 0.3em;
     }
+}
+
+#message {
+
+    button {
+        height: 2rem;
+        width: 4rem;
+    }
+    
+    input {
+        width: 87%;
+        height: 2em;
+        margin: 0 auto;
+    }
+        
 }

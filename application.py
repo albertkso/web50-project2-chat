@@ -17,7 +17,7 @@ channels_list = [ 'general', 'spam' ]
 @app.route("/")
 def index():
 
-    return render_template('_home.html', chats=channels_list)
+    return render_template('_home.html', channels_list=channels_list)
 
 
 @app.route("/signin", methods=['POST'])
