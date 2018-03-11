@@ -10,20 +10,21 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 
 socketio = SocketIO(app)
 
-USER_SIGNED_IN = 'user_signed_in'
-all_channels  = [ 'spam1', 'spam2', 'spam3' ]
+logged_in_key = 'user_signed_in'
+channels_list = [ 'general', 'spam' ]
+
 
 @app.route("/")
 def index():
 
-    return render_template('_home.html', chats=all_channels)
+    return render_template('_home.html', chats=channels_list)
 
 
 @app.route("/signin", methods=['POST'])
 def signin():
 
     username = request.form.get('userid')
-    session[USER_SIGNED_IN] = username
+    _signin_user(username)
 
     return redirect(url_for('index'))
 
@@ -31,7 +32,7 @@ def signin():
 @app.route("/signout", methods=['POST'])
 def signout():
 
-    session.clear()
+    _signout_user()
     return redirect(url_for('index'))
 
 
@@ -39,10 +40,32 @@ def signout():
 def manage_channels():
 
     channel = request.form.get('channel')
-    return jsonify(success=True, channel=channel)
+
+    if channel not in channels_list:
+        channels_list.append(channel)
+        success = True
+
+    else:
+        success = False
+
+    return jsonify(success=success, channel=channel)
 
 
-def _is_signed_in():
+def _is_signed_in(username):
 
-    return session[USER_SIGNED_IN]
+    if not logged_in_key in session:
+        return False
 
+    else:
+        return True
+
+
+def _signin_user(username):
+
+    session.clear()
+    session[logged_in_key] = username
+
+
+def _signout_user():
+
+    session.clear()
