@@ -18,8 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('server send history', data => {
-        for (i = 0; i <= data.length; i++) {
-            console.log(data[i]);
+
+        const contentdiv = document.querySelector('.content');
+        contentdiv.innerHTML = "";        
+
+        for (i = 0; i < data.length; i++) {
+            message = data[i];
+            const messagediv = document.createElement('div');
+            messagediv.innerHTML = 
+                `<div style='margin: 0.5em 0.5em;'>
+                    <div style='font-weight: bold'> ${message.sender} </div>
+                    <div style='font-size: 95%'> ${message.content} </div>
+                 </div>`;
+            document.querySelector('.content').append(messagediv);    
         }
     });
     
