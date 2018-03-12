@@ -46,7 +46,15 @@
 {% block main %}
 
     <div class='title'></div>
-    <div class='content'></div>
+    <div class='content'>
+        {% for msg in chat_history %}
+        <div style='margin: 0.5em 0.5em;'>
+            <div style='font-weight: bold'> {{ msg.sender }} </div>
+            <div style='font-size: 95%'> {{ msg.content }} </div>
+        </div>
+        {% endfor %}
+    </div>
+    
     <div class='message_form'>
         <form id='message_form' method='post'>
             <input id='message' type='text'/> <button id='send_message'> Send </button>

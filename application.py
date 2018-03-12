@@ -20,7 +20,16 @@ chat_channels = {
 @app.route("/")
 def index():
 
-    return render_template('_home.html', chat_channels=list(chat_channels.keys()))
+    if not 'current_channel' in session or session['current_channel'] == None:
+        current_channel = 'general'
+
+    else:
+        current_channel = session['current_channel']
+
+    return render_template('_home.html',
+                            current_channel=current_channel,
+                            chat_history=chat_channels[current_channel], 
+                            chat_channels=list(chat_channels.keys()))
 
 
 @app.route("/signin", methods=['POST'])
@@ -67,6 +76,8 @@ def handle_message(message):
 
 @socketio.on('client select channel')
 def handle_message(message):
+
+    session['current_channel'] = message['channel']
 
     history = chat_channels[message['channel']]
     emit('server send history', history)
