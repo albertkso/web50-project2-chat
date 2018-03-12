@@ -11,13 +11,16 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 socketio = SocketIO(app)
 
 logged_in_key = 'user_signed_in'
-channels_list = [ 'general', 'spam' ]
+chat_channels = { 
+    'general' : [],
+    'spam'    : [],
+}
 
 
 @app.route("/")
 def index():
 
-    return render_template('_home.html', channels_list=channels_list)
+    return render_template('_home.html', chat_channels=list(chat_channels.keys()))
 
 
 @app.route("/signin", methods=['POST'])
@@ -39,28 +42,34 @@ def signout():
 @app.route("/manage_channels", methods=['POST'])
 def manage_channels():
 
-    channel = request.form.get('channel')
+    channel_name = request.form.get('channel')
 
-    if channel not in channels_list:
-        channels_list.append(channel)
+    if channel_name not in chat_channels:
+        chat_channels[channel_name] = []
         success = True
 
     else:
         success = False
 
-    return jsonify(success=success, channel=channel)
+    return jsonify(success=success, channel=channel_name)
 
 
 @socketio.on('client send message')
 def handle_message(message):
 
+    sender = message['sender']
+    content = message['content']
+
+    chat_channels[message['channel']].append(message)
+
     emit('server broadcast', message, broadcast=True)
 
 
 @socketio.on('client select channel')
-def handle_channel(message):
+def handle_message(message):
 
-    print('select channel notification received')
+    history = chat_channels[message['channel']]
+    emit('server send history', history)
 
 
 def _is_signed_in(username):

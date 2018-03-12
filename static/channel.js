@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messagediv.innerHTML = 
             `<div style='margin: 0.5em 0.5em;'>
                 <div style='font-weight: bold'> ${data.sender} </div>
-                <div style='font-size: 95%'> ${data.message} </div>
+                <div style='font-size: 95%'> ${data.content} </div>
              </div>`;
         document.querySelector('.content').append(messagediv);
     });
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
   */
 
     document.querySelector('#send_message').onclick = () => {
-        const channel = 'general';
         const sender = document.getElementById('current_user').innerText;
-        const message = document.querySelector('#message').value;
+        const channel = document.querySelector('.active_channel').innerText;
+        const content = document.querySelector('#message').value;
 
         document.querySelector('#message').value = "";
 
-        message_parameters = { channel: channel, sender: sender, message: message };
+        message_parameters = { channel: channel, sender: sender, content: content };
         socket.emit('client send message', message_parameters);
 
         return false;
