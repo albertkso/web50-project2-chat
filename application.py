@@ -45,7 +45,8 @@ def signin():
 def signout():
 
     _signout_user()
-    return redirect(url_for('index'))
+
+    return render_template('_home.html')
 
 
 @app.route("/manage_channels", methods=['POST'])
@@ -83,7 +84,7 @@ def handle_message(message):
     emit('server send history', history)
 
 
-def _is_signed_in(username):
+def _is_signed_in():
 
     if not logged_in_key in session:
         return False
