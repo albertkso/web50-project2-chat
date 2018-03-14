@@ -22,11 +22,11 @@
 
     {% if session.user_signed_in %}
 
-        <h2> Chat Channels </h2>
+        <h2> channels </h2>
 
         <form class='channel_form'>
             <input type='text' id='channel' name='channel'>
-            <button id='add_channel'> Go </button>
+            <button id='add_channel'> Add </button>
         </form>
 
         <ul id='channels'> 
@@ -45,6 +45,10 @@
 
 {% block main %}
 
+    {% if session.user_signed_in %}
+
+    <h2> #{{ current_channel }} </h2>
+
     <div class='title'></div>
     <div class='content'>
         {% for msg in chat_history %}
@@ -60,6 +64,8 @@
             <input id='message' type='text'/> <button id='send_message'> Send </button>
         </form>
     </div>
+
+    {% endif %}
 
 {% endblock %}
 

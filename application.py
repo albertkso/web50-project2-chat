@@ -10,8 +10,10 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 
 socketio = SocketIO(app)
 
-logged_in_key = 'user_signed_in'
-chat_channels = { 
+USER_SIGNED_IN  = 'user_signed_in'
+CURRENT_CHANNEL = 'current_channel'
+
+chat_messages = { 
     'general' : [],
     'spam'    : [],
 }
@@ -19,17 +21,13 @@ chat_channels = {
 
 @app.route("/")
 def index():
-
-    if not 'current_channel' in session or session['current_channel'] == None:
-        current_channel = 'general'
-
-    else:
-        current_channel = session['current_channel']
+    
+    active_channel = _current_channel()
 
     return render_template('_home.html',
-                            current_channel=current_channel,
-                            chat_history=chat_channels[current_channel], 
-                            chat_channels=list(chat_channels.keys()))
+            current_channel=active_channel,
+            chat_history=chat_messages[active_channel], 
+            chat_channels=list(chat_messages.keys()))
 
 
 @app.route("/signin", methods=['POST'])
@@ -54,8 +52,8 @@ def manage_channels():
 
     channel_name = request.form.get('channel')
 
-    if channel_name not in chat_channels:
-        chat_channels[channel_name] = []
+    if channel_name not in chat_messages:
+        chat_messages[channel_name] = []
         success = True
 
     else:
@@ -70,7 +68,7 @@ def handle_message(message):
     sender = message['sender']
     content = message['content']
 
-    chat_channels[message['channel']].append(message)
+    chat_messages[message['channel']].append(message)
 
     emit('server broadcast', message, broadcast=True)
 
@@ -79,24 +77,40 @@ def handle_message(message):
 def handle_message(message):
 
     session['current_channel'] = message['channel']
+    history = chat_messages[message['channel']]
 
-    history = chat_channels[message['channel']]
     emit('server send history', history)
 
 
 def _is_signed_in():
 
-    if not logged_in_key in session:
+    if not USER_SIGNED_IN in session:
         return False
 
     else:
         return True
 
 
+def _current_channel(channel=None):
+
+    if channel:
+
+        session[CURRENT_CHANNEL] = channel
+        return True
+
+    elif not 'current_channel' in session:
+         
+        return 'general'
+
+    else:
+
+        return session[CURRENT_CHANNEL]
+
+
 def _signin_user(username):
 
     session.clear()
-    session[logged_in_key] = username
+    session[USER_SIGNED_IN] = username
 
 
 def _signout_user():
