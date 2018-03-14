@@ -27,13 +27,18 @@
         <div>
             <select id='channelselector' style='display: inline-block'>
                 {% for menuitem in chat_channels %} 
-                    <option value='{{ menuitem }}'> {{ menuitem }}</option>
+                    <option value='{{ menuitem }}'> {{ menuitem }} </option>
                 {% endfor %}
             </select>
-            <form style='display: inline-block' class='channel_form'>
-                    <input type='text' id='channel' name='channel'>
-                    <button id='add_channel'> Add </button>
-            </form>    
+            <span id='add_channel'>
+                <form style='display: inline-block' class='channel_form'>
+                        <button id='new_channel'> New </button>
+                    <span id='toggle_create' style='display: none'>
+                        <input type='text' id='channel' name='channel'>
+                        <button id='add_channel'> Create </button>
+                    </span>
+                </form>
+            </span>    
         </div>
 
     {% endif %}
@@ -44,12 +49,10 @@
 
     {% if session.user_signed_in %}
 
-    <h2> #{{ current_channel }} </h2>
-
     <div class='title'></div>
     <div class='content'>
         {% for msg in chat_history %}
-        <div style='margin: 0.5em 0.5em;'>
+        <div>
             <div style='font-weight: bold'> {{ msg.sender }} </div>
             <div style='font-size: 95%'> {{ msg.content }} </div>
         </div>

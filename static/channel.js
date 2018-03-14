@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('server broadcast', data => {
         const messagediv = document.createElement('div');
         messagediv.innerHTML = 
-            `<div style='margin: 0.5em 0.5em;'>
+            `<div>
                 <div style='font-weight: bold'> ${data.sender} </div>
                 <div style='font-size: 95%'> ${data.content} </div>
              </div>`;
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message = data[i];
             const messagediv = document.createElement('div');
             messagediv.innerHTML = 
-                `<div style='margin: 0.5em 0.5em;'>
+                `<div>
                     <div style='font-weight: bold'> ${message.sender} </div>
                     <div style='font-size: 95%'> ${message.content} </div>
                  </div>`;
@@ -43,22 +43,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
 
-        data.append('channel', channelName);
+        if (channelName.length > 0) {
 
-        request.open('POST', '/manage_channels');
+            data.append('channel', channelName);
 
-        request.onload = () => {
-            const data = JSON.parse(request.responseText);
-            if (data.success) {
-                const channelSelector = document.querySelector('#channelselector');
-                const newChannel = document.createElement('option')
-                newChannel.innerHTML = channelName;
-                newChannel.value = channelName;
-                channelSelector.appendChild(newChannel);
+            request.open('POST', '/manage_channels');
+
+            request.onload = () => {
+                const data = JSON.parse(request.responseText);
+                if (data.success) {
+                    const channelSelector = document.querySelector('#channelselector');
+                    const newChannel = document.createElement('option')
+                    newChannel.innerHTML = channelName;
+                    newChannel.value = channelName;
+                    channelSelector.appendChild(newChannel);
+                }
             }
+
+            request.send(data);
+
+            const createChannelSpan = document.querySelector('#toggle_create');
+            createChannelSpan.style.display = 'none';
+            
         }
 
-        request.send(data);
         return false;
     };
 
@@ -70,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const allChannels = document.querySelector('select');
         const activeChannel = allChannels[allChannels.selectedIndex].value;
-        const sender = document.getElementById('current_user').value;
+        const sender = document.querySelector('#current_user').innerText;
         const content = document.querySelector('#message').value;
 
         document.querySelector('#message').value = "";
@@ -95,4 +103,18 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('client select channel', message_parameters);
     }
 
+ /*
+  * Allow channel creation to be enabled / disabled
+  */
+
+    document.querySelector('#new_channel').onclick = () => {
+        const createChannelSpan = document.querySelector('#toggle_create');
+
+        if (createChannelSpan.style.display == '') {
+            createChannelSpan.style.display = 'none';
+        }
+        else {
+            createChannelSpan.style.display = '';
+        }
+    }
 })
