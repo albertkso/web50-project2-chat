@@ -7,8 +7,11 @@ html {
 
 $padding-horizontal: 1.0rem;
 $padding-vertical: 0.5rem;
-
 $header-height: 2.5rem;
+
+body {
+    font-family: 'Hind Vadodara', sans-serif;
+}
 
 header {
     position: fixed;
@@ -18,7 +21,7 @@ header {
 
     margin: 0 auto;
     padding: 0 $padding-horizontal;
-    background-color: cyan;
+    background-color: darkcyan;
     color: white;
 
     display: flex;
@@ -36,26 +39,46 @@ h2 {
     font-size: 110%;
 }
 
+button, select {
+    font-size: 90%;
+}
+
+input {
+    font-size: 85%;
+}
+
 .side {
-    margin-top: $header-height;
-    margin-bottom: 0.5em;
+    position: fixed;
+    top: $header-height;
+    width: 100%;
+
     padding: 0 $padding-horizontal;
+    background-color: lightgray;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .content {
-    margin-bottom: 0.5em;
-    padding: 0 $padding-horizontal;
+    padding: 4.5rem $padding-horizontal;
 }
 
 footer {
-    padding: $padding-vertical $padding-horizontal;
-
+    padding: 0;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2.0rem;
 
-    background-color: lightgray;
-    z-index: 100;
+    background-color: white;
+    border-top: solid 0.5px gray;
+
+    input {
+        width: 100%;
+        border: none;
+    }
+
+    button {
+        display: none;
+    }
 }
