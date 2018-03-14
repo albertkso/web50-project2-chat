@@ -8,11 +8,9 @@
     {% block javascript_includes %} {% endblock %}
 </head>
 <body>
-    <div class='primary'>
-        <header> {% block signin %} {% endblock %} </header>
-        <section class='side'> {% block side %} {% endblock %} </section>
-        <section class='main'> {% block main %} {% endblock %} </section>
-        <footer></footer>
-    </div>
+    <header> {% block signin %} {% endblock %} </header>
+    <section class='side'> {% block side %} {% endblock %} </section>
+    <section class='main'> {% block main %} {% endblock %} </section>
+    <footer> {% block work %} {% endblock %} </footer>
 </body>
 </html>

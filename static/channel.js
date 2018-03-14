@@ -50,10 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         request.onload = () => {
             const data = JSON.parse(request.responseText);
             if (data.success) {
-                const channelsList = document.querySelector('#channels');
-                const newChannel = document.createElement('li');
+                const channelSelector = document.querySelector('#channelselector');
+                const newChannel = document.createElement('option')
                 newChannel.innerHTML = channelName;
-                channelsList.appendChild(newChannel);
+                newChannel.value = channelName;
+                channelSelector.appendChild(newChannel);
             }
         }
 
@@ -66,13 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
   */
 
     document.querySelector('#send_message').onclick = () => {
-        const sender = document.getElementById('current_user').innerText;
-        const channel = document.querySelector('.active_channel').innerText;
+
+        const allChannels = document.querySelector('select');
+        const activeChannel = allChannels[allChannels.selectedIndex].value;
+        const sender = document.getElementById('current_user').value;
         const content = document.querySelector('#message').value;
 
         document.querySelector('#message').value = "";
 
-        message_parameters = { channel: channel, sender: sender, content: content };
+        message_parameters = { channel: activeChannel, sender: sender, content: content };
         socket.emit('client send message', message_parameters);
 
         return false;
@@ -82,19 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
   * Configure the active chat channel
   */
 
-    document.querySelector('#channels').onclick = (evt) => {
-        if (evt.target.tagName != 'LI')
-            return;
+    document.querySelector('#channelselector').onchange = () => {
 
-        const activeChannel = evt.target;
-        const channelName = activeChannel.innerText;
-        const allChannels = document.querySelectorAll('#channels li');
+        const allChannels = document.querySelector('select');
+        const channelName = allChannels[allChannels.selectedIndex].value;
         const sender = document.getElementById('current_user').innerText;
-
-        for (i = 0; i < allChannels.length; i++) {
-            allChannels[i].classList.remove('active_channel');
-        }
-        activeChannel.classList.add('active_channel');
 
         message_parameters = { channel: channelName, sender: sender };
         socket.emit('client select channel', message_parameters);
