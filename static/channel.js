@@ -10,9 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('server broadcast', data => {
         const messagediv = document.createElement('div');
         messagediv.innerHTML = 
-            `<div>
-                <div style='font-weight: bold'> ${data.sender} </div>
-                <div style='font-size: 95%'> ${data.content} </div>
+            `<div class='msg_container'>
+                <div>
+                    <span class='msg_sender'> ${data.sender} </span>
+                    <span class='msg_time'> ${data.mesg_time} </span>
+                </div>
+                <div class ='msg_content'> ${data.content} </div>
              </div>`;
         document.querySelector('.content').append(messagediv);
     });
@@ -26,10 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
             message = data[i];
             const messagediv = document.createElement('div');
             messagediv.innerHTML = 
-                `<div>
-                    <div style='font-weight: bold'> ${message.sender} </div>
-                    <div style='font-size: 95%'> ${message.content} </div>
-                 </div>`;
+                `<div class='msg_container'>
+                    <div>
+                        <span class='msg_sender'> ${message.sender} </span>
+                        <span class='msg_time'> ${message.mesg_time} </span>
+                    </div>
+                    <div class ='msg_content'> ${message.content} </div>
+                </div>`;
             document.querySelector('.content').append(messagediv);    
         }
     });
@@ -38,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   * Create a new chat channel
   */
 
-    document.querySelector('#add_channel').onclick = () => {
+    document.querySelector('#myform').onsubmit = () => {
         const data = new FormData();
         const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
@@ -62,9 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             request.send(data);
 
-            const createChannelSpan = document.querySelector('#toggle_create');
-            createChannelSpan.style.display = 'none';
-            
+            console.log('is also true');
+
+            const actionButton = document.querySelector('#action_button');
+            const createChannelSpan = document.querySelector('#channel_form');
+            createChannelSpan.className = 'hidden_form';
+            createChannelSpan.style.display = '';
+            actionButton.innerText = 'New';
         }
 
         return false;
@@ -99,22 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const channelName = allChannels[allChannels.selectedIndex].value;
         const sender = document.getElementById('current_user').innerText;
 
+        const channelDisplay = document.querySelector('#channel_name');
+        channelDisplay.innerText = '#' + channelName;
+
         message_parameters = { channel: channelName, sender: sender };
         socket.emit('client select channel', message_parameters);
     }
 
  /*
-  * Allow channel creation to be enabled / disabled
+  * Allow channel creation form to be displayed or hidden
   */
 
-    document.querySelector('#new_channel').onclick = () => {
-        const createChannelSpan = document.querySelector('#toggle_create');
+    document.querySelector('#action_button').onclick = () => {
+        let createChannelSpan = document.querySelector('#channel_form');
+        let actionButton = document.querySelector('#action_button');
 
-        if (createChannelSpan.style.display == '') {
-            createChannelSpan.style.display = 'none';
+        if (createChannelSpan.className == 'hidden_form') {
+            createChannelSpan.className = '';
+            createChannelSpan.style.display = 'inline-block';
+            actionButton.innerText = 'Cancel';
         }
         else {
+            createChannelSpan.className = 'hidden_form';
             createChannelSpan.style.display = '';
+            actionButton.innerText = 'New';
         }
+
+        return false;
     }
 })

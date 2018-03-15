@@ -22,7 +22,7 @@
 
     {% if session.user_signed_in %}
 
-        <h2> channels </h2>
+        <h2 id='channel_name'> channels </h2>
 
         <div>
             <select id='channelselector' style='display: inline-block'>
@@ -31,12 +31,12 @@
                 {% endfor %}
             </select>
             <span id='add_channel'>
-                <form style='display: inline-block' class='channel_form'>
-                    <span id='toggle_create' style='display: none'>
+                <form id='myform' style='display: inline-block'>
+                    <span id='channel_form' class='hidden_form'>
                         <input type='text' id='channel' name='channel'>
-                        <button id='add_channel'> Create </button>
+                        <button id='toggle_create'> Create </button>
                     </span>
-                    <button id='new_channel'> New </button>
+                    <span> <button id='action_button'> New </button> </span> 
                 </form>
             </span>    
         </div>
@@ -52,13 +52,16 @@
     <div class='title'></div>
     <div class='content'>
         {% for msg in chat_history %}
-        <div>
-            <div style='font-weight: bold'> {{ msg.sender }} </div>
-            <div style='font-size: 95%'> {{ msg.content }} </div>
+        <div class='msg_container'>
+            <div>
+                <span class='msg_sender'> {{ msg.sender }} </span>
+                <span class='msg_time'> {{ msg.mesg_time }} </span>
+            </div>
+            <div class ='msg_content'> {{ msg.content }} </div>
         </div>
         {% endfor %}
     </div>
-    
+
     {% endif %}
 
 {% endblock %}
