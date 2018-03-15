@@ -59,6 +59,26 @@ input {
     justify-content: space-between;
 }
 
+.hidden_form {
+    display: none;
+}
+
+.msg_container {
+    margin: 0.5em 0;
+}
+
+.msg_sender {
+    font-weight: bold;
+}
+
+.msg_time {
+    font-size: 80%;
+}
+
+.msg_content {
+    font-size: 95%;
+}
+
 .content {
     padding: 4.5rem $padding-horizontal;
 }
