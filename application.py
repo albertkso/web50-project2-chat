@@ -45,7 +45,7 @@ def signout():
 
     _signout_user()
 
-    return render_template('_home.html')
+    return redirect(url_for('index'))
 
 
 @app.route("/manage_channels", methods=['POST'])
