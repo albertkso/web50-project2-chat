@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_socketio import SocketIO, emit
@@ -65,8 +66,10 @@ def manage_channels():
 @socketio.on('client send message')
 def handle_message(message):
 
-    sender = message['sender']
-    content = message['content']
+  # Assign timestamp to message
+    current_time = datetime.now()
+    message['mesg_time'] = current_time.strftime('%H:%M')
+    message['mesg_date'] = current_time.strftime('%Y-%m-%d')
 
     chat_messages[message['channel']].append(message)
 
@@ -94,16 +97,13 @@ def _is_signed_in():
 def _current_channel(channel=None):
 
     if channel:
-
         session[CURRENT_CHANNEL] = channel
         return True
 
     elif not 'current_channel' in session:
-         
         return 'general'
 
     else:
-
         return session[CURRENT_CHANNEL]
 
 
