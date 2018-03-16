@@ -6,7 +6,7 @@
 
         <script 
             type='text/javascript'
-            src='{{ url_for("static", filename="channel.js") }}'>
+            src='{{ url_for("static", filename="chat.js") }}'>
         </script>
 
         <script 
@@ -17,6 +17,18 @@
         <script 
             type='text/javascript' 
             src='{{ url_for("static", filename="selector.js") }}'>
+        </script>
+
+        <script 
+            type='text/javascript' 
+            src='{{ url_for("static", filename="userlogout.js") }}'>
+        </script>
+
+    {% else %}
+    
+        <script 
+            type='text/javascript' 
+            src='{{ url_for("static", filename="userlogin.js") }}'>
         </script>
 
     {% endif %}
@@ -86,7 +98,7 @@
 
         <h1> my spam </h1>
         <form id='signin_form' action='/signin' method='post'>
-            <label for='user_id'>
+            <label for='userid'>
                 <span> user: </span> <input id='userid' name='userid' type='text'/>
             </label>
             <button> Go </button>
