@@ -2,13 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
- /*
-  * Receive any messages / updates from other chat clients and update
-  * local client
-  */
+ // Receive any messages / updates from other chat clients and display
+ // locally
 
     socket.on('server broadcast', data => {
+        const activeChannel = localStorage.getItem('activeChannel');
         const messagediv = document.createElement('div');
+
+        if (activeChannel != data.channel)
+            return;
+
         messagediv.innerHTML = 
             `<div class='msg_container'>
                 <div>
@@ -20,8 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.content').append(messagediv);
     });
 
-    socket.on('server send history', data => {
+ // Receive chat channel's message history to display locally
 
+    socket.on('server send history', data => {
         const contentdiv = document.querySelector('.content');
         contentdiv.innerHTML = "";        
 
@@ -36,17 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class ='msg_content'> ${message.content} </div>
                 </div>`;
-            document.querySelector('.content').append(messagediv);    
+            document.querySelector('.content').append(messagediv);
         }
     });
-    
- /*
-  * Create a new chat channel
-  */
 
-    let createChannelForm = document.querySelector('#create_channel');
-
-    createChannelForm.addEventListener('submit', () => {
+ // Define handler to manage channel creation
+  
+    let createChannelForm = document.querySelector('#toggle_create');
+    createChannelForm.addEventListener('click', () => {
 
         const data = new FormData();
         const channelName = document.querySelector('#channel').value;
@@ -83,11 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })
 
- /*
-  * Send message to chat server for broadcast on the active channel
-  */
+ // Define handler that manages the sending of messages originating from client
 
-    document.querySelector('#send_message').onclick = () => {
+    sendMessageButton = document.querySelector('#send_message');
+    sendMessageButton.addEventListener('click', () => {
 
         const allChannels = document.querySelector('select');
         const activeChannel = allChannels[allChannels.selectedIndex].value;
@@ -100,13 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('client send message', message_parameters);
 
         return false;
-    }
+    
+    });
 
- /*
-  * Configure the active chat channel
-  */
+ // Define handler that manages active chat channel configuration
 
-    document.querySelector('#select_channel').onchange = () => {
+    channelSelect =  document.querySelector('#select_channel');
+    channelSelect.addEventListener('change', () => {
 
         const allChannels = document.querySelector('select');
         const channelName = allChannels[allChannels.selectedIndex].value;
@@ -115,15 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const channelDisplay = document.querySelector('#channel_name');
         channelDisplay.innerText = '#' + channelName;
 
+        localStorage.setItem('activeChannel', channelName);
+
         message_parameters = { channel: channelName, sender: sender };
         socket.emit('client select channel', message_parameters);
-    }
 
- /*
-  * Allow channel creation form to be displayed or hidden
-  */
+    });
 
-    document.querySelector('#enable_channel_edit').onclick = () => {
+ // Define handler that displays or hides channel creation form
+
+    toggleAddControl = document.querySelector('#enable_channel_edit');
+    toggleAddControl.addEventListener('click', (evt) => {
+
         let createChannelSpan = document.querySelector('#channel_create_fields');
         let actionButton = document.querySelector('#enable_channel_edit');
 
@@ -137,7 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
             createChannelSpan.style.display = '';
             actionButton.innerText = 'New';
         }
+        
+        evt.preventDefault();
 
         return false;
-    }
+
+    });
+
 })

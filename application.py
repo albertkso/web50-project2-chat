@@ -20,7 +20,7 @@ chat_messages = {
 }
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     
     active_channel = _current_channel()
