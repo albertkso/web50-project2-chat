@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   * Create a new chat channel
   */
 
-    document.querySelector('#myform').onsubmit = () => {
+    document.querySelector('#create_channel').onsubmit = () => {
         const data = new FormData();
         const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             request.onload = () => {
                 const data = JSON.parse(request.responseText);
                 if (data.success) {
-                    const channelSelector = document.querySelector('#channelselector');
+                    const channelSelector = document.querySelector('#select_channel');
                     const newChannel = document.createElement('option')
                     newChannel.innerHTML = channelName;
                     newChannel.value = channelName;
@@ -68,10 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             request.send(data);
 
-            console.log('is also true');
-
-            const actionButton = document.querySelector('#action_button');
-            const createChannelSpan = document.querySelector('#channel_form');
+            const actionButton = document.querySelector('#enable_channel_edit');
+            const createChannelSpan = document.querySelector('#channel_create_fields');
             createChannelSpan.className = 'hidden_form';
             createChannelSpan.style.display = '';
             actionButton.innerText = 'New';
@@ -103,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
   * Configure the active chat channel
   */
 
-    document.querySelector('#channelselector').onchange = () => {
+    document.querySelector('#select_channel').onchange = () => {
 
         const allChannels = document.querySelector('select');
         const channelName = allChannels[allChannels.selectedIndex].value;
@@ -120,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
   * Allow channel creation form to be displayed or hidden
   */
 
-    document.querySelector('#action_button').onclick = () => {
-        let createChannelSpan = document.querySelector('#channel_form');
-        let actionButton = document.querySelector('#action_button');
+    document.querySelector('#enable_channel_edit').onclick = () => {
+        let createChannelSpan = document.querySelector('#channel_create_fields');
+        let actionButton = document.querySelector('#enable_channel_edit');
 
         if (createChannelSpan.className == 'hidden_form') {
             createChannelSpan.className = '';

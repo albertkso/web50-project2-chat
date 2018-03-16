@@ -42,18 +42,18 @@
         <h2 id='channel_name'> channels </h2>
 
         <div>
-            <select id='channelselector' style='display: inline-block'>
+            <select id='select_channel' style='display: inline-block'>
                 {% for menuitem in chat_channels %} 
                     <option value='{{ menuitem }}'> {{ menuitem }} </option>
                 {% endfor %}
             </select>
-            <span id='add_channel'>
-                <form id='myform' style='display: inline-block'>
-                    <span id='channel_form' class='hidden_form'>
+            <span>
+                <form id='create_channel' style='display: inline-block'>
+                    <span id='channel_create_fields' class='hidden_form'>
                         <input type='text' id='channel' name='channel'>
                         <button id='toggle_create'> Create </button>
                     </span>
-                    <span> <button id='action_button'> New </button> </span> 
+                    <span> <button id='enable_channel_edit'> New </button> </span> 
                 </form>
             </span>    
         </div>
