@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else {
         channelDisplay.innerText = '#general';
+        localStorage.setItem('activeChannel', 'general');
     }
     
 });
