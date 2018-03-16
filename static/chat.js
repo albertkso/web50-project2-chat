@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
  // Receive messages in real time from other chat clients and updates
- // local client display, if necessary
+ // display, if necessary
  
     socket.on('server broadcast', data => {
 
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
  // Define event handler to manage sending of messages originating from client
 
     sendMessageButton = document.querySelector('#send_message');
-    sendMessageButton.addEventListener('click', () => {
+    sendMessageButton.addEventListener('click', (evt) => {
 
         let allChannels = document.querySelector('select');
         let channelName = allChannels.options[allChannels.selectedIndex].value;
@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         message_parameters = { channel: channelName, sender: sender, content: content };
         socket.emit('client send message', message_parameters);
+
+        evt.preventDefault()
 
         return false;
     
@@ -124,9 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(channelName);
 
-        if (channelName) {
-            localStorage.setItem('activeChannel', channelName);
-        }
+        localStorage.setItem('activeChannel', channelName);
 
         message_parameters = { channel: channelName, sender: sender };
         socket.emit('client select channel', message_parameters);
