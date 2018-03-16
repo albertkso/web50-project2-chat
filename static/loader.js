@@ -1,13 +1,13 @@
 
 //
-//  Sets current chat channel whenever page is first loaded 
+//  Gets the currently selected chat channel when the page is first loaded 
 //
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const sender = document.getElementById('current_user').innerText;
-    const currentChannel = localStorage.getItem('activeChannel');
     const channelDisplay = document.querySelector('#channel_name');
+    const currentChannel = localStorage.getItem('activeChannel');
 
     if (currentChannel) {
         channelDisplay.innerText = '#' + currentChannel;
