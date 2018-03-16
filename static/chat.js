@@ -2,12 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+    socket.on('server broadcast new channel', data => {
+
+        let select = document.querySelector('select');
+        let chatOption = document.createElement('option');
+
+        chatOption.innerText = data.channel;
+        select.append(chatOption);
+
+    });
+
  // Receive messages in real time from other chat clients and updates
  // display, if necessary
  
-    socket.on('server broadcast', data => {
+    socket.on('server broadcast new message', data => {
 
-        channelName = localStorage.getItem('activeChannel');
+        let channelName = localStorage.getItem('activeChannel');
         if (channelName != data.channel) {
             return;
         }
@@ -84,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         createChannelSpan.className = 'hidden_form';
         createChannelSpan.style.display = '';
         actionButton.innerText = 'New';
+
+        message_parameters = { channel: channelName };
+        socket.emit('client create channel', message_parameters);
 
         return false;
 

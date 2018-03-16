@@ -80,7 +80,13 @@ def handle_message(message):
 
     chat_messages[message['channel']].append(message)
 
-    emit('server broadcast', message, broadcast=True)
+    emit('server broadcast new message', message, broadcast=True)
+
+
+@socketio.on('client create channel')
+def handle_message(message):
+
+    emit('server broadcast new channel', message, broadcast=True)
 
 
 @socketio.on('client select channel')
