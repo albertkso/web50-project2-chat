@@ -1,12 +1,9 @@
 
 //
-//  Load chat channel contents to page, whenever page is first loaded or
-//  refreshed
+//  Sets current chat channel whenever page is first loaded 
 //
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     const sender = document.getElementById('current_user').innerText;
     const currentChannel = localStorage.getItem('activeChannel');
@@ -18,8 +15,5 @@ document.addEventListener('DOMContentLoaded', () => {
     else {
         channelDisplay.innerText = '#general';
     }
-
-    message_parameters = { channel: currentChannel, sender: sender };
-    socket.emit('client select channel', message_parameters);
     
 });

@@ -20,6 +20,13 @@ chat_messages = {
 }
 
 
+@app.before_request
+def session_management():
+    # https://tinyurl.com/y7dqvr5a
+    # make the session last indefinitely until it is cleared
+    session.permanent = True
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     
@@ -79,7 +86,7 @@ def handle_message(message):
 @socketio.on('client select channel')
 def handle_message(message):
 
-    session['current_channel'] = message['channel']
+    session[CURRENT_CHANNEL] = message['channel']
     history = chat_messages[message['channel']]
 
     emit('server send history', history)
@@ -100,7 +107,7 @@ def _current_channel(channel=None):
         session[CURRENT_CHANNEL] = channel
         return True
 
-    elif not 'current_channel' in session:
+    elif not CURRENT_CHANNEL in session:
         return 'general'
 
     else:
