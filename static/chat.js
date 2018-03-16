@@ -44,39 +44,44 @@ document.addEventListener('DOMContentLoaded', () => {
   * Create a new chat channel
   */
 
-    document.querySelector('#create_channel').onsubmit = () => {
+    let createChannelForm = document.querySelector('#create_channel');
+
+    createChannelForm.addEventListener('submit', () => {
+
         const data = new FormData();
         const channelName = document.querySelector('#channel').value;
         const request = new XMLHttpRequest();
 
-        if (channelName.length > 0) {
+     // Check if channel name is valid
+        if (channelName.length == 0) 
+            return false;
 
-            data.append('channel', channelName);
+        data.append('channel', channelName);
 
-            request.open('POST', '/manage_channels');
-
-            request.onload = () => {
-                const data = JSON.parse(request.responseText);
-                if (data.success) {
-                    const channelSelector = document.querySelector('#select_channel');
-                    const newChannel = document.createElement('option')
-                    newChannel.innerHTML = channelName;
-                    newChannel.value = channelName;
-                    channelSelector.appendChild(newChannel);
-                }
+     // Create new channel and notify and sync with server
+        request.open('POST', '/manage_channels');
+        request.onload = () => {
+            const responsedata = JSON.parse(request.responseText);
+            if (responsedata.success) {
+                const channelSelector = document.querySelector('#select_channel');
+                const newChannel = document.createElement('option')
+                newChannel.innerHTML = channelName;
+                newChannel.value = channelName;
+                channelSelector.appendChild(newChannel);
             }
-
-            request.send(data);
-
-            const actionButton = document.querySelector('#enable_channel_edit');
-            const createChannelSpan = document.querySelector('#channel_create_fields');
-            createChannelSpan.className = 'hidden_form';
-            createChannelSpan.style.display = '';
-            actionButton.innerText = 'New';
         }
+        request.send(data);
+
+     // Hide form again after create channel request submission
+        const actionButton = document.querySelector('#enable_channel_edit');
+        const createChannelSpan = document.querySelector('#channel_create_fields');
+        createChannelSpan.className = 'hidden_form';
+        createChannelSpan.style.display = '';
+        actionButton.innerText = 'New';
 
         return false;
-    };
+
+    })
 
  /*
   * Send message to chat server for broadcast on the active channel
