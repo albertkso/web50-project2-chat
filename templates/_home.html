@@ -115,10 +115,14 @@
 
 {% block work %}
 
+    {% if session.user_signed_in %}
+
     <div class='message_form'>
         <form id='message_form' method='post'>
             <input id='message' type='text'/> <button id='send_message'> Send </button>
         </form>
     </div>
 
+    {% endif %}
+    
 {% endblock %}

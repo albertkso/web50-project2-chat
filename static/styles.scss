@@ -44,7 +44,7 @@ button, select {
 }
 
 input {
-    font-size: 85%;
+    font-size: 90%;
 }
 
 .side {
@@ -84,16 +84,17 @@ input {
 }
 
 footer {
-    padding: 0;
     position: fixed;
+    padding: 0;
     bottom: 0;
     left: 0;
     width: 100%;
 
+    border-top: solid 1px black;
     background-color: white;
-    border-top: solid 0.5px gray;
 
     input {
+        height: 2.5em;
         width: 100%;
         border: none;
     }
