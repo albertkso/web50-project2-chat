@@ -11,8 +11,9 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 
 socketio = SocketIO(app)
 
-USER_SIGNED_IN  = 'user_signed_in'
-CURRENT_CHANNEL = 'current_channel'
+USER_SIGNED_IN      = 'user_signed_in'
+CURRENT_CHANNEL     = 'current_channel'
+MESSAGE_HISTORY_CAP = 100
 
 chat_messages = { 
     'general' : [],
@@ -78,7 +79,10 @@ def handle_message(message):
     message['mesg_time'] = current_time.strftime('%H:%M')
     message['mesg_date'] = current_time.strftime('%Y-%m-%d')
 
+  # Add message to history, with history capped at 100 messages
     chat_messages[message['channel']].append(message)
+    if len(chat_messages[message['channel']]) > MESSAGE_HISTORY_CAP:
+        del chat_messages[message['channel']][0]
 
     emit('server broadcast new message', message, broadcast=True)
 
