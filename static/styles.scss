@@ -43,8 +43,12 @@ button, select {
     font-size: 90%;
 }
 
+select {
+    width: 12rem;
+}
+
 input {
-    font-size: 90%;
+    font-size: 95%;
 }
 
 .side {
@@ -63,8 +67,13 @@ input {
     display: none;
 }
 
+.msg_container:hover {
+    background-color: hsl(0, 0%, 90%);
+}
+
 .msg_container {
-    margin: 0.5em 0;
+    padding: 0.25rem $padding-horizontal;
+    margin: 0;
 }
 
 .msg_sender {
@@ -80,7 +89,7 @@ input {
 }
 
 .content {
-    padding: 4.5rem $padding-horizontal;
+    padding: 4.5rem 0;
 }
 
 footer {
