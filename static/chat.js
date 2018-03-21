@@ -2,8 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
- // Set up listener for chat channel creation notifications originating from
- // other clients
+ // Define function and template that updates DOM upon receipt of chat
+ // message(s)
+
+    let messageTemplate = 
+        `<div class='msg_container'>
+            <div>
+                <span class='msg_sender'> {{sender}} </span>
+                <span class='msg_time'> {{mesg_time}} </span>
+            </div>
+            <div class='msg_content' id='{{messageId}}'> </div>
+         </div>`;
+
+    function _populateMessageDiv(message) {
+
+        let messageDiv = document.createElement('div');
+        let messageId = 't' + message.sender.replace(/\s+/g, '_') + '_' + message.mesg_time.replace(/:/g, '_');
+
+        message.messageId = messageId;
+
+        messageDiv.innerHTML = Mustache.render(messageTemplate, message);
+        document.querySelector('.content').append(messageDiv);
+        document.querySelector('#' + messageId).innerText = unescape(message.content);
+
+    }
+
+ // Set up listener for chat channel creation notifications and update
+ // local chat client interface upon receipt of such a notification
 
     socket.on('server broadcast new channel', data => {
 
@@ -15,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Set up listener for messages sent by other chat clients
+ // Set up listener for any messages sent by other chat clients, and
+ // update local chat client interface with message contents upon receipt
+ // of message
  
     socket.on('server broadcast new message', data => {
 
@@ -23,23 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (channelName != data.channel) {
             return;
         }
-
-        let messagediv = document.createElement('div');
-        let contentDivName = 't' + data.sender.replace(/\s+/g, '_') + '_' + data.mesg_time.replace(/:/g, '_');
-        messagediv.innerHTML = 
-            `<div class='msg_container'>
-                <div>
-                    <span class='msg_sender'> ${data.sender} </span>
-                    <span class='msg_time'> ${data.mesg_time} </span>
-                </div>
-                <div class='msg_content' id='${contentDivName}'> </div>
-             </div>`;
-        document.querySelector('.content').append(messagediv);
-        document.querySelector('#'+contentDivName).innerText = unescape(data.content);
+        _populateMessageDiv(data);
 
     });
 
- // Set up listener to receive message history from server
+ // Set up listener to receive message history from server, and update 
+ // local chat client interface with history upon receipt of history
 
     socket.on('server send history', data => {
 
@@ -47,19 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contentdiv.innerHTML = "";        
 
         for (i = 0; i < data.length; i++) {
-            message = data[i];
-            let messagediv = document.createElement('div');
-            let contentDivName = 't' + message.sender.replace(/\s+/g, '_') + '_' + message.mesg_time.replace(/:/g, '_');
-            messagediv.innerHTML = 
-                `<div class='msg_container'>
-                    <div>
-                        <span class='msg_sender'> ${message.sender} </span>
-                        <span class='msg_time'> ${message.mesg_time} </span>
-                    </div>
-                    <div class='msg_content' id='${contentDivName}'> </div>
-                </div>`;
-            document.querySelector('.content').append(messagediv);
-            document.querySelector('#'+contentDivName).innerText = unescape(message.content);
+            _populateMessageDiv(data[i]);
         }
 
     });
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message_parameters = { channel: channelName, sender: sender, content: content };
         socket.emit('client send message', message_parameters);
 
-        evt.preventDefault()
+        evt.preventDefault() // prevent further event propagation, we are good here
 
         return false;
     
