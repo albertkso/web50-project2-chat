@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+ // Set up listener for chat channel creation notifications originating from
+ // other clients
+
     socket.on('server broadcast new channel', data => {
 
         let select = document.querySelector('select');
@@ -12,8 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Receive messages in real time from other chat clients and updates
- // display, if necessary
+ // Set up listener for messages sent by other chat clients
  
     socket.on('server broadcast new message', data => {
 
@@ -35,8 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Receive messages / message history from server and updates local client
- // display
+ // Set up listener to receive message history from server
 
     socket.on('server send history', data => {
 
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Define event handler to manage chat channel creation
+ // Define event handler to manage chat channel creation requests
   
     let createChannelForm = document.querySelector('#toggle_create');
     createChannelForm.addEventListener('click', () => {
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })
 
- // Define event handler to manage sending of messages originating from client
+ // Define event handler to handle client send message requests
 
     sendMessageButton = document.querySelector('#send_message');
     sendMessageButton.addEventListener('click', (evt) => {
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     });
 
- // Define event handler that manages active chat channel selection
+ // Define event handler to manage active chat channel selection
 
     channelSelect =  document.querySelector('#select_channel');
     channelSelect.addEventListener('change', () => {
@@ -146,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Define handler that hides or displays chat channel creation form
+ // Define event handler to hide or display chat channel creation form
 
     toggleAddControl = document.querySelector('#enable_channel_edit');
     toggleAddControl.addEventListener('click', (evt) => {
