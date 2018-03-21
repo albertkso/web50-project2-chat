@@ -25,15 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let messagediv = document.createElement('div');
+        let contentDivName = 't' + data.sender.replace(/\s+/g, '_') + '_' + data.mesg_time.replace(/:/g, '_');
         messagediv.innerHTML = 
             `<div class='msg_container'>
                 <div>
                     <span class='msg_sender'> ${data.sender} </span>
                     <span class='msg_time'> ${data.mesg_time} </span>
                 </div>
-                <div class ='msg_content'> ${data.content} </div>
+                <div class='msg_content' id='${contentDivName}'> </div>
              </div>`;
         document.querySelector('.content').append(messagediv);
+        document.querySelector('#'+contentDivName).innerText = unescape(data.content);
 
     });
 
@@ -47,15 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (i = 0; i < data.length; i++) {
             message = data[i];
             let messagediv = document.createElement('div');
+            let contentDivName = 't' + message.sender.replace(/\s+/g, '_') + '_' + message.mesg_time.replace(/:/g, '_');
             messagediv.innerHTML = 
                 `<div class='msg_container'>
                     <div>
                         <span class='msg_sender'> ${message.sender} </span>
                         <span class='msg_time'> ${message.mesg_time} </span>
                     </div>
-                    <div class ='msg_content'> ${message.content} </div>
+                    <div class='msg_content' id='${contentDivName}'> </div>
                 </div>`;
             document.querySelector('.content').append(messagediv);
+            document.querySelector('#'+contentDivName).innerText = unescape(message.content);
         }
 
     });

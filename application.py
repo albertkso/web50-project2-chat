@@ -87,7 +87,7 @@ def handle_message(message):
   # A channel's message history is capped at MESSAGE_HISTORY_CAP messages
 
     current_time = datetime.now()
-    message['mesg_time'] = current_time.strftime('%H:%M')
+    message['mesg_time'] = current_time.strftime('%H:%M:%S')
     message['mesg_date'] = current_time.strftime('%Y-%m-%d')
 
     chat_messages[message['channel']].append(message)
