@@ -11,8 +11,10 @@ app.secret_key = os.urandom(24) # Configure a secret key for sessions
 
 socketio = SocketIO(app)
 
+
 USER_SIGNED_IN      = 'user_signed_in'
 CURRENT_CHANNEL     = 'current_channel'
+
 
 # Create message storage along with two channels out of the box
 
@@ -21,7 +23,6 @@ chat_messages = {
     'general' : [],
     'spam'    : [],
 }
-
 
 # Make session persist until the user either signs out or session is cleared
 # https://tinyurl.com/y7dqvr5a
@@ -35,13 +36,8 @@ def session_management():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    
-    active_channel = _current_channel()
 
-    return render_template('_home.html',
-            current_channel=active_channel,
-            chat_history=chat_messages[active_channel], 
-            chat_channels=list(chat_messages.keys()))
+    return render_template('_home.html', chat_channels=list(chat_messages.keys()))
 
 
 # Sign in user to chat session
@@ -50,19 +46,21 @@ def index():
 def signin():
 
     _signin_user(request.form.get('userid'))
+
     return redirect(url_for('index'))
 
 
-# Sign out user from chat session
+# Sign user out of chat session
 
 @app.route("/signout", methods=['POST'])
 def signout():
 
     _signout_user()
+
     return redirect(url_for('index'))
 
 
-# Handle new channel creation requests and propagate new channel info
+# Handle new chat channel creation requests and propagate new channel info
 # to other clients
 
 @app.route("/manage_channels", methods=['POST'])
@@ -80,14 +78,14 @@ def manage_channels():
     return jsonify(success=success, channel=channel_name)
 
 
-# Add metadata to message received from chat client and forward to other
-# chat clients
+# Handle and broadcast client originated messages
 
 @socketio.on('client send message')
 def handle_message(message):
 
   # Add server timestamp to message and add message to message history
   # A channel's message history is capped at MESSAGE_HISTORY_CAP messages
+
     current_time = datetime.now()
     message['mesg_time'] = current_time.strftime('%H:%M')
     message['mesg_date'] = current_time.strftime('%Y-%m-%d')
@@ -114,7 +112,7 @@ def handle_message(message):
 @socketio.on('client select channel')
 def handle_message(message):
 
-    session[CURRENT_CHANNEL] = message['channel']
+    _current_channel(message['channel'])
     history = chat_messages[message['channel']]
 
     emit('server send history', history)
