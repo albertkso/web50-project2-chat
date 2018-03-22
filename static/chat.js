@@ -8,22 +8,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let messageTemplate = 
         `<div class='msg_container'>
             <div>
-                <span class='msg_sender'> {{sender}} </span>
-                <span class='msg_time'> {{mesg_time}} </span>
+                <span class='msg_sender'> {{ sender }} </span>
+                <span class='msg_time'> {{ mesgTime }} </span>
             </div>
-            <div class='msg_content' id='{{messageId}}'> </div>
-         </div>`;
+            <div class='msg_content' id='{{ messageId }}'> {{ content }} </div>
+        </div>`;
 
-    function _populateMessageDiv(message) {
+    function _writeMessageToDOM(message) {
 
         let messageDiv = document.createElement('div');
-        let messageId = 't' + message.sender.replace(/\s+/g, '_') + '_' + message.mesg_time.replace(/:/g, '_');
 
+        let messageId = 't' + 
+            message.sender.replace(/\s+/g, '_') + '_' + 
+            message.mesgTime.replace(/:/g, '_');
         message.messageId = messageId;
 
         messageDiv.innerHTML = Mustache.render(messageTemplate, message);
+
         document.querySelector('.content').append(messageDiv);
-        document.querySelector('#' + messageId).innerText = unescape(message.content);
 
     }
 
@@ -50,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (channelName != data.channel) {
             return;
         }
-        _populateMessageDiv(data);
+        _writeMessageToDOM(data);
 
     });
 
@@ -63,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contentdiv.innerHTML = "";        
 
         for (i = 0; i < data.length; i++) {
-            _populateMessageDiv(data[i]);
+            _writeMessageToDOM(data[i]);
         }
 
     });

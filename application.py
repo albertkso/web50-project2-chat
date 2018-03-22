@@ -29,6 +29,7 @@ chat_messages = {
 
 @app.before_request
 def session_management():
+    
     session.permanent = True
 
 
@@ -87,8 +88,8 @@ def handle_message(message):
   # A channel's message history is capped at MESSAGE_HISTORY_CAP messages
 
     current_time = datetime.now()
-    message['mesg_time'] = current_time.strftime('%H:%M:%S')
-    message['mesg_date'] = current_time.strftime('%Y-%m-%d')
+    message['mesgTime'] = current_time.strftime('%H:%M:%S')
+    message['mesgDate'] = current_time.strftime('%Y-%m-%d')
 
     chat_messages[message['channel']].append(message)
     if len(chat_messages[message['channel']]) > MESSAGE_HISTORY_CAP:
@@ -98,7 +99,7 @@ def handle_message(message):
 
 
 # Receive create chat channel request from chat client and forward new
-# chat channel information to other chat clients
+# chat channel information to other remaining chat clients
 
 @socketio.on('client create channel')
 def handle_message(message):
