@@ -69,6 +69,14 @@ input {
 
 .msg_container:hover {
     background-color: hsl(0, 0%, 90%);
+
+    [class*="delete_"] {
+        visibility: visible;
+    }
+}
+
+[class*="delete_"] {
+    visibility: hidden;
 }
 
 .msg_container {
@@ -105,6 +113,10 @@ footer {
     input {
         height: 2.5em;
         width: 100%;
+        padding: 0 $padding-horizontal;
+    }
+
+    input:focus {
         border: none;
     }
 

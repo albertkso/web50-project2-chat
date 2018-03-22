@@ -6,13 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
  // message(s)
 
     let messageTemplate = 
-        `<div class='msg_container'>
+        `<div class='msg_container' id='{{ messageId }}'>
             <div>
                 <span class='msg_sender'> {{ sender }} </span>
                 <span class='msg_time'> {{ mesgTime }} </span>
             </div>
-            <div class='msg_content' id='{{ messageId }}'> {{ content }} </div>
-        </div>`;
+            <div style='display:flex; justify-content: space-between;' class='msg_content'> 
+                <div> {{ content }} </div>
+                <div class='delete_msg'> [X] </div>
+            </div>
+         </div>`;
 
     function _writeMessageToDOM(message) {
 
@@ -26,6 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         messageDiv.innerHTML = Mustache.render(messageTemplate, message);
 
         document.querySelector('.content').append(messageDiv);
+
+        let deleteLinkDiv = document.querySelector('#' + messageId + ' .delete_msg');
+        deleteLinkDiv.addEventListener('click', (evt) => {
+            console.log('click');
+        });
 
     }
 
@@ -115,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  // Define event handler to handle client send message requests
 
-    sendMessageButton = document.querySelector('#send_message');
+    let sendMessageButton = document.querySelector('#send_message');
     sendMessageButton.addEventListener('click', (evt) => {
 
         let allChannels = document.querySelector('select');
@@ -138,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  // Define event handler to manage active chat channel selection
 
-    channelSelect =  document.querySelector('#select_channel');
+    let channelSelect =  document.querySelector('#select_channel');
     channelSelect.addEventListener('change', () => {
 
         let allChannels = document.querySelector('select');
@@ -159,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  // Define event handler to hide or display chat channel creation form
 
-    toggleAddControl = document.querySelector('#enable_channel_edit');
+    let toggleAddControl = document.querySelector('#enable_channel_edit');
     toggleAddControl.addEventListener('click', (evt) => {
 
         let createChannelSpan = document.querySelector('#channel_create_fields');
