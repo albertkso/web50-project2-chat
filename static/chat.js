@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let messageDiv = document.createElement('div');
 
         let messageId = 't' + 
-            message.sender.replace(/\s+/g, '_') + '_' + 
-            message.mesgTime.replace(/:/g, '_');
+            message.sender.replace(/\s+/g, '_') +
+            message.mesgDate.replace(/-/g, '') + '_' +
+            message.mesgTime.replace(/:/g, '');
         message.messageId = messageId;
 
         messageDiv.innerHTML = Mustache.render(messageTemplate, message);
