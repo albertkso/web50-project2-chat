@@ -29,7 +29,7 @@ chat_messages = {
 
 @app.before_request
 def session_management():
-    
+
     session.permanent = True
 
 
@@ -46,7 +46,7 @@ def index():
 @app.route("/signin", methods=['POST'])
 def signin():
 
-    _signin_user(request.form.get('userid'))
+    _signin_user(request.form.get('userid').strip())
 
     return redirect(url_for('index'))
 
@@ -67,7 +67,7 @@ def signout():
 @app.route("/manage_channels", methods=['POST'])
 def manage_channels():
 
-    channel_name = request.form.get('channel')
+    channel_name = request.form.get('channel').strip()
 
     if channel_name not in chat_messages:
         chat_messages[channel_name] = []
@@ -117,6 +117,12 @@ def handle_message(message):
     history = chat_messages[message['channel']]
 
     emit('server send history', history)
+
+
+@socketio.on('client delete message')
+def handle_message(message):
+
+    emit('server broadcast delete message', message, broadcast = True)
 
 
 # Define supporting functions

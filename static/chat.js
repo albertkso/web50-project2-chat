@@ -19,24 +19,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function _writeMessageToDOM(message) {
 
+        let currentUser = document.getElementById('current_user').innerText;
         let messageDiv = document.createElement('div');
 
-        let messageId = 't' + 
+        let messageId =
             message.sender.replace(/\s+/g, '_') +
             message.mesgDate.replace(/-/g, '') + '_' +
             message.mesgTime.replace(/:/g, '');
         message.messageId = messageId;
 
         messageDiv.innerHTML = Mustache.render(messageTemplate, message);
-
         document.querySelector('.content').append(messageDiv);
 
         let deleteLinkDiv = document.querySelector('#' + messageId + ' .delete_msg');
+        if (currentUser != message.sender) {
+            deleteLinkDiv.style.display = 'none';
+        }
+
         deleteLinkDiv.addEventListener('click', (evt) => {
-            console.log('click');
+            let message_params = {
+                channel: message.channel,
+                username: message.sender,
+                date: message.mesgDate, 
+                time: message.mesgTime 
+            };
+            socket.emit('client delete message', message_params);
         });
 
     }
+
+ // Set up listener for delete message notifications and update local
+ // chat client interface upon receipt of such a notification
+ 
+    socket.on('server broadcast delete message', data => {
+
+        let messageId =
+            data.username.replace(/\s+/g, '_') +
+            data.date.replace(/-/g, '') + '_' +
+            data.time.replace(/:/g, '');
+
+        contentDiv = document.querySelector('#' + messageId + ' .msg_content');
+        contentDiv.innerHTML = '<div> message deleted </div> <div> </div>';    
+
+    });
 
  // Set up listener for chat channel creation notifications and update
  // local chat client interface upon receipt of such a notification
