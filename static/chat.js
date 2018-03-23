@@ -114,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
      // Add new message notification to client's display
 
-        _configureChannels(data.channel, true)
+        if (document.body.scrollHeight > window.innerHeight) {
+            _configureChannels(data.channel, true)
+        }
 
         let channelName = localStorage.getItem('activeChannel');
         if (channelName != data.channel) {
@@ -209,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#message').value = "";
 
-        message_parameters = { channel: channelName, content: content };
+        message_parameters = { channel: channelName, content: content, sender: sender };
         socket.emit('client send message', message_parameters);
 
         evt.preventDefault() // prevent further event propagation, we are good here

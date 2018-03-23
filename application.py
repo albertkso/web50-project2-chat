@@ -89,7 +89,6 @@ def handle_message(message):
     current_time = datetime.now()
     message['mesgTime'] = current_time.strftime('%H:%M:%S')
     message['mesgDate'] = current_time.strftime('%Y-%m-%d')
-    message['sender'] = session[USER_SIGNED_IN]
 
     chat_messages[message['channel']].append(message)
     if len(chat_messages[message['channel']]) > MESSAGE_HISTORY_CAP:
