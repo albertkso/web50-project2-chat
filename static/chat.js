@@ -51,6 +51,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+ // Configure display of new message notifications on channel selector
+
+    function _configureChannels(channel, hasNewMessages) {
+
+        let channelName = localStorage.getItem('activeChannel');
+        let channelOptions = document.querySelectorAll('option');
+
+        if (hasNewMessages == false) {
+            for (i = 0; i < channelOptions.length; i++) {
+                let option = channelOptions[i];
+                if (option.text == channelName + ' **') {
+                    option.text = channelName;
+                }
+            }
+        }
+        else {
+            for (i = 0; i < channelOptions.length; i++) {
+                let option = channelOptions[i];
+                if (option.text == channelName) {
+                    option.text = channelName + ' **';
+                }
+            }
+        }
+
+    }
+    
  // Set up listener for delete message notifications and update local
  // chat client interface upon receipt of such a notification
 
@@ -88,13 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
      // Add new message notification to client's display
 
-        let channelOptions = document.querySelectorAll('option');
-        for (i = 0; i < channelOptions.length; i++) {
-            let option = channelOptions[i];
-            if (option.value == data.channel) {
-                option.text = option.text + ' **';
-            }
-        }
+        _configureChannels(data.channel, true)
 
         let channelName = localStorage.getItem('activeChannel');
         if (channelName != data.channel) {
@@ -125,16 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
 
-            console.log('in scroll check');
             // Remove new message notification from channel name
             let channelName = localStorage.getItem('activeChannel');
-            let channelOptions = document.querySelectorAll('option');
-            for (i = 0; i < channelOptions.length; i++) {
-                let option = channelOptions[i];
-                if (option.text == channelName + ' **') {
-                    option.text = channelName;
-                }
-            }
+            _configureChannels(channelName, false);
 
         }
 
@@ -196,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#message').value = "";
 
-        message_parameters = { channel: channelName, sender: sender, content: content };
+        message_parameters = { channel: channelName, content: content };
         socket.emit('client send message', message_parameters);
 
         evt.preventDefault() // prevent further event propagation, we are good here
@@ -218,16 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let channelName = rawChannelName.match(/[A-Za-z0-9_]+/g).join('');
         channelDisplay.innerText = '#' + channelName;
 
-     // Remove new message notification from channel name
-        let channelOptions = document.querySelectorAll('option');
-        for (i = 0; i < channelOptions.length; i++) {
-            let option = channelOptions[i];
-            if (option.text == channelName + ' **') {
-                option.text = channelName;
-            }
-        }
-
-        console.log(channelName);
+        _configureChannels(channelName, false);
 
         localStorage.setItem('activeChannel', channelName);
 
