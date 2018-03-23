@@ -108,12 +108,12 @@ footer {
     width: 100%;
 
     border-top: solid 1px black;
-    background-color: white;
 
     input {
         height: 2.5em;
         width: 100%;
         padding: 0 $padding-horizontal;
+        background-color: hsl(0, 0%, 93.5%);
     }
 
     input:focus {
