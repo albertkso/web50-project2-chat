@@ -83,6 +83,12 @@ def manage_channels():
 @socketio.on('client send message')
 def handle_message(message):
 
+  # Verify message sender header matches username stored in session
+  # state !!
+
+    if not message['sender'] == session[USER_SIGNED_IN]:
+        return
+
   # Add server timestamp to message and add message to message history
   # A channel's message history is capped at MESSAGE_HISTORY_CAP messages
 

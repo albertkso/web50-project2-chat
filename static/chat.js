@@ -205,8 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sendMessageButton.addEventListener('click', (evt) => {
 
         let allChannels = document.querySelector('select');
-        let channelName = allChannels.options[allChannels.selectedIndex].value;
-        let sender = document.querySelector('#current_user').innerText;
+        let channelName = allChannels.options[allChannels.selectedIndex].innerText.trim();
+        let sender = document.querySelector('#current_user').innerText.trim();
         let content = document.querySelector('#message').value;
 
         document.querySelector('#message').value = "";
