@@ -55,22 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function _configureChannels(channel, hasNewMessages) {
 
-        let channelName = localStorage.getItem('activeChannel');
         let channelOptions = document.querySelectorAll('option');
 
         if (hasNewMessages == false) {
             for (i = 0; i < channelOptions.length; i++) {
                 let option = channelOptions[i];
-                if (option.text == channelName + ' **') {
-                    option.text = channelName;
+                if (option.text == channel + ' **') {
+                    option.text = channel;
                 }
             }
         }
         else {
             for (i = 0; i < channelOptions.length; i++) {
                 let option = channelOptions[i];
-                if (option.text == channelName) {
-                    option.text = channelName + ' **';
+                if (option.text == channel) {
+                    option.text = channel + ' **';
                 }
             }
         }
@@ -114,7 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
      // Add new message notification to client's display
 
-        if (document.body.scrollHeight > window.innerHeight) {
+        let currentUser = document.getElementById('current_user').innerText.trim();
+
+        console.log(currentUser);
+        console.log(data.sender);
+        if (document.body.scrollHeight > window.innerHeight &&
+            currentUser != data.sender) {
             _configureChannels(data.channel, true)
         }
 
