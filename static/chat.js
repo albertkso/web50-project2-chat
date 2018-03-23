@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function _writeMessageToDOM(message) {
 
-        let currentUser = document.getElementById('current_user').innerText;
+        let currentUser = document.getElementById('current_user').innerText.trim();
         let messageDiv = document.createElement('div');
 
         let messageId =
