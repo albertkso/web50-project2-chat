@@ -7,7 +7,7 @@ html {
 
 $padding-horizontal: 1.0rem;
 $padding-vertical: 0.5rem;
-$header-height: 2.5rem;
+$header-height: 3.0rem;
 
 body {
     font-family: 'Hind Vadodara', sans-serif;
@@ -44,10 +44,11 @@ button, select {
 }
 
 select {
-    width: 12rem;
+    width: 10rem;
 }
 
 input {
+    width: 10rem;
     font-size: 95%;
 }
 
@@ -73,6 +74,11 @@ input {
     [class*="delete_"] {
         visibility: visible;
     }
+
+    [class*="delete_"]:hover {
+        background-color: yellow;
+    }
+
 }
 
 [class*="delete_"] {
