@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
- // Define function and template that updates DOM upon receipt of chat
- // message(s)
+ // Define template and function that update DOM upon receipt of chat
+ // messages
 
     let messageTemplate = 
         `<div class='msg_container' id='{{ messageId }}'>
@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentUser != message.sender) {  
             deleteLinkDiv.style.display = 'none';
         }
-
         deleteLinkDiv.addEventListener('click', (evt) => {
             let message_params = {
                 channel: message.channel,
@@ -87,10 +86,21 @@ document.addEventListener('DOMContentLoaded', () => {
  
     socket.on('server broadcast new message', data => {
 
+     // Add new message notification to client's display
+
+        let channelOptions = document.querySelectorAll('option');
+        for (i = 0; i < channelOptions.length; i++) {
+            let option = channelOptions[i];
+            if (option.value == data.channel) {
+                option.text = option.text + ' **';
+            }
+        }
+
         let channelName = localStorage.getItem('activeChannel');
         if (channelName != data.channel) {
             return;
         }
+
         _writeMessageToDOM(data);
 
     });
@@ -109,16 +119,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+ // Toggle display of new message alerts
+
+    window.addEventListener('scroll', () => {
+
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+
+            console.log('in scroll check');
+            // Remove new message notification from channel name
+            let channelName = localStorage.getItem('activeChannel');
+            let channelOptions = document.querySelectorAll('option');
+            for (i = 0; i < channelOptions.length; i++) {
+                let option = channelOptions[i];
+                if (option.text == channelName + ' **') {
+                    option.text = channelName;
+                }
+            }
+
+        }
+
+    })
+
  // Define event handler to manage chat channel creation requests
   
     let createChannelForm = document.querySelector('#toggle_create');
     createChannelForm.addEventListener('click', () => {
 
         let data = new FormData();
-        let channelName = document.querySelector('#channel').value;
+        let rawChannelName = document.querySelector('#channel').value;
         let request = new XMLHttpRequest();
 
      // Check if channel name is valid
+        let channelName = rawChannelName.trim().match(/[A-Za-z0-9_]+/g).join('');
         if (channelName.length == 0) 
             return false;
 
@@ -179,11 +211,21 @@ document.addEventListener('DOMContentLoaded', () => {
     channelSelect.addEventListener('change', () => {
 
         let allChannels = document.querySelector('select');
-        let channelName = allChannels.options[allChannels.selectedIndex].value;
+        let rawChannelName = allChannels.options[allChannels.selectedIndex].value;
         let sender = document.getElementById('current_user').innerText;
         let channelDisplay = document.querySelector('#channel_name');
 
+        let channelName = rawChannelName.match(/[A-Za-z0-9_]+/g).join('');
         channelDisplay.innerText = '#' + channelName;
+
+     // Remove new message notification from channel name
+        let channelOptions = document.querySelectorAll('option');
+        for (i = 0; i < channelOptions.length; i++) {
+            let option = channelOptions[i];
+            if (option.text == channelName + ' **') {
+                option.text = channelName;
+            }
+        }
 
         console.log(channelName);
 
