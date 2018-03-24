@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
             for (i = 0; i < channelSelector.length; i++) {
                 let option = channelSelector[i];
                 if (option.text == channel + ' **') {
-                    unreadChannels++;
                     option.text = channel;
                 }
                 else if (option.text.search(/\*\*/) > 0) {
@@ -94,12 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (unreadChannels > 0) {
-            let statusDiv = document.querySelector('#status');
             statusDiv.innerText = 'new messages';
+        }
+        else {
+            statusDiv.innerText = '';
         }
 
      // Return the number of chat channels with unread messages
-
+        
         return unreadChannels;
     }
     
@@ -303,6 +304,20 @@ document.addEventListener('DOMContentLoaded', () => {
         evt.preventDefault(); // prevent further event propagation, we are good here
 
         return false;
+
+    });
+
+ // Define event handler to acknowledge unread message notification on
+ // channels that don't have a scrollbar (i.e. have less than one page in 
+ // content)
+
+    let chatContent = document.querySelector('.content');
+    chatContent.addEventListener('click', (evt) => {
+
+        let channelName = localStorage.getItem('activeChannel');
+        if (chatContent.clientHeight <= window.innerHeight) {
+            _configureChannels(channelName, false);
+        }
 
     });
 
