@@ -10,9 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let sender = document.getElementById('current_user').innerText;
     let channelDisplay = document.querySelector('#channel_name');
     let currentChannel = localStorage.getItem('activeChannel');
+    let channelSelector = document.querySelector('select');
 
     if (currentChannel) {
         channelDisplay.innerText = '#' + currentChannel;
+        for (i = 0; i < channelSelector.options.length; i++) {
+            if (channelSelector.options[i].text == currentChannel) {
+                channelSelector.options[i].selected = true;
+            }
+        }
     }
     else {
         channelDisplay.innerText = '#general';
