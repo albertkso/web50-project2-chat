@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div style='display:flex; justify-content: space-between;' class='msg_content'> 
                 <div> {{ content }} </div>
-                <div class='delete_msg'> [X] </div>
+                <div class='delete_msg'> delete  <span class='delete_box'> [X] </span> </div>
             </div>
          </div>`;
 
@@ -36,10 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.content').append(messageDiv);
 
         let deleteLinkDiv = document.querySelector('#' + messageId + ' .delete_msg');
-        if (currentUser != message.sender) {  
+        if (currentUser != message.sender || message.content == '- message deleted -') {  
             deleteLinkDiv.style.display = 'none';
         }
-        deleteLinkDiv.addEventListener('click', (evt) => {
+
+        let deleteBox = document.querySelector('#' + messageId + ' .delete_box');
+        deleteBox.addEventListener('click', (evt) => {
             let message_params = {
                 channel: message.channel,
                 username: message.sender,
@@ -115,8 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
 
-        console.log(currentUser);
-        console.log(data.sender);
         if (document.body.scrollHeight > window.innerHeight &&
             currentUser != data.sender) {
             _configureChannels(data.channel, true)
