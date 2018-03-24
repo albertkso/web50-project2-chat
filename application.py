@@ -83,8 +83,7 @@ def manage_channels():
 @socketio.on('client send message')
 def handle_message(message):
 
-  # Verify message sender header matches username stored in session
-  # state !!
+  # Verify message sender matches username stored in session state
 
     if not message['sender'] == session[USER_SIGNED_IN]:
         return

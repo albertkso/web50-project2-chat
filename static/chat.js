@@ -241,6 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
         message_parameters = { channel: channelName, content: content, sender: sender };
         socket.emit('client send message', message_parameters);
 
+        let messagesDiv = document.querySelector('.content');
+        scrollParameters = { behavior: 'smooth', block: 'end', inline: 'nearest' }
+        messagesDiv.scrollIntoView(scrollParameters);
+
         evt.preventDefault() // prevent further event propagation, we are good here
 
         return false;
