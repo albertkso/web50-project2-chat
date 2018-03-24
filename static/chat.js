@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     channelSelect.addEventListener('change', () => {
 
         let allChannels = document.querySelector('select');
-        let rawChannelName = allChannels.options[allChannels.selectedIndex].value;
+        let rawChannelName = allChannels.options[allChannels.selectedIndex].innerText;
         let sender = document.getElementById('current_user').innerText;
         let channelDisplay = document.querySelector('#channel_name');
 

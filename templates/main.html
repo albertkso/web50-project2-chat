@@ -1,0 +1,57 @@
+{% extends 'boilerplate.html' %}
+
+
+{% block javascript_includes %}
+
+    {% include '_javascript.html' %}
+
+{% endblock %}
+
+
+{% block side %}
+
+    {% if session.user_signed_in %}
+
+        {% include '_channel.html' %}
+
+    {% endif %}
+
+{% endblock %}
+
+
+{% block main %}
+
+    {% if session.user_signed_in %}
+
+    <div class='title'></div>
+    <div class='content'></div>
+
+    {% endif %}
+
+{% endblock %}
+
+
+{% block signin %}
+
+    {% if session.user_signed_in %}
+
+        {% include '_logout.html' %}
+
+    {% else %}
+
+        {% include '_login.html' %}
+
+    {% endif %}
+
+{% endblock %}
+
+
+{% block work %}
+
+    {% if session.user_signed_in %}
+
+        {% include '_send.html' %}
+    
+    {% endif %}
+    
+{% endblock %}

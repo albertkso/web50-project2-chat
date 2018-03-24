@@ -1,0 +1,40 @@
+<script 
+    type='text/javascript' 
+    src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js">
+</script>
+
+<script 
+    type='text/javascript'
+    src='{{ url_for("static", filename="mustache.js") }}'>
+</script>
+
+{% if session.user_signed_in %}
+
+    <script 
+        type='text/javascript'
+        src='{{ url_for("static", filename="chat.js") }}'>
+    </script>
+
+    <script 
+        type='text/javascript' 
+        src='{{ url_for("static", filename="channel.js") }}'>
+    </script>
+
+    <script 
+        type='text/javascript' 
+        src='{{ url_for("static", filename="loader.js") }}'>
+    </script>
+
+    <script 
+        type='text/javascript' 
+        src='{{ url_for("static", filename="userlogout.js") }}'>
+    </script>
+
+{% else %}
+
+    <script 
+        type='text/javascript' 
+        src='{{ url_for("static", filename="userlogin.js") }}'>
+    </script>
+
+{% endif %}

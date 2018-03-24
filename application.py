@@ -37,7 +37,7 @@ def session_management():
 @app.route("/", methods=['GET', 'POST'])
 def index():
 
-    return render_template('_home.html', chat_channels=list(chat_messages.keys()))
+    return render_template('main.html', chat_channels=list(chat_messages.keys()))
 
 
 # Sign in user to chat session
