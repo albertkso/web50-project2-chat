@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
- // Define template and function that update DOM upon receipt of chat
- // messages
+ // Define template and function used to update the DOM upon receipt of chat
+ // message
 
     let messageTemplate = 
         `<div class='msg_container' id='{{ messageId }}'>
@@ -21,19 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
         let messageDiv = document.createElement('div');
+        let messageId = message.sender.replace(/\s+/g, '_') + '_' + 
+                        message.mesgDate.replace(/-/g, '') + '_' + 
+                        message.mesgTime.replace(/:/g, '');
 
-        let messageId =
-            message.sender.replace(/\s+/g, '_') +
-            message.mesgDate.replace(/-/g, '') + '_' +
-            message.mesgTime.replace(/:/g, '');
+     // Assemble DIV and insert into DOM
+
         message.messageId = messageId;
-
         if (message.content.length == 0) {
             message.content = '- message deleted -';
         }
-
         messageDiv.innerHTML = Mustache.render(messageTemplate, message);
         document.querySelector('.content').append(messageDiv);
+
+     // Configure delete message event handler for newly inserted DOM and enable
+     // if current user is author of message
 
         let deleteLinkDiv = document.querySelector('#' + messageId + ' .delete_msg');
         if (currentUser != message.sender || message.content == '- message deleted -') {  
@@ -53,17 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
- // Configure display of new message notifications on channel selector
+ // Display or hide unread message notifications
 
     function _configureChannels(channel, hasNewMessages) {
 
         let unreadChannels = 0;
-        let channelOptions = document.querySelectorAll('option');
+        let channelSelector = document.querySelectorAll('option');
         let statusDiv = document.querySelector('#status');
 
-        if (hasNewMessages == false) {
-            for (i = 0; i < channelOptions.length; i++) {
-                let option = channelOptions[i];
+     // Remove unread message notification from display
+
+        if (hasNewMessages == false) { 
+            for (i = 0; i < channelSelector.length; i++) {
+                let option = channelSelector[i];
                 if (option.text == channel + ' **') {
                     unreadChannels++;
                     option.text = channel;
@@ -72,11 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     unreadChannels++;
                 }
             }
-
         }
-        else {
-            for (i = 0; i < channelOptions.length; i++) {
-                let option = channelOptions[i];
+
+     // Add unread message notification ('**') to display
+
+        if (hasNewMessages == true) { 
+            for (i = 0; i < channelSelector.length; i++) {
+                let option = channelSelector[i];
                 if (option.text == channel) {
                     option.text = channel + ' **';
                     unreadChannels++;
@@ -92,16 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
             statusDiv.innerText = 'new messages';
         }
 
+     // Return the number of chat channels with unread messages
+
         return unreadChannels;
     }
     
  // Set up listener for delete message notifications and update local
- // chat client interface upon receipt of such a notification
+ // chat client upon receipt of such a notification
 
     socket.on('server broadcast delete message', data => {
 
         let messageId =
-            data.username.replace(/\s+/g, '_') +
+            data.username.replace(/\s+/g, '_') + '_' +
             data.date.replace(/-/g, '') + '_' +
             data.time.replace(/:/g, '');
 
@@ -112,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
  // Set up listener for chat channel creation notifications and update
- // local chat client interface upon receipt of such a notification
+ // local chat client upon receipt of such a notification
 
     socket.on('server broadcast new channel', data => {
 
@@ -125,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
  // Set up listener for any messages sent by other chat clients, and
- // update local chat client interface with message contents upon receipt
- // of message
+ // update local chat client with message contents upon receipt of message
  
     socket.on('server broadcast new message', data => {
 
@@ -149,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
  // Set up listener to receive message history from server, and update 
- // local chat client interface with history upon receipt of history
+ // local chat client upon receipt of history
 
     socket.on('server send history', data => {
 
@@ -162,17 +169,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
- // Toggle display of new message alerts
+ // Define event handler to manage new message notification display
 
     window.addEventListener('scroll', () => {
 
+     // Remove new message notification from channel name upon scrolling
+     // of chat window to bottom of screen
+
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
 
-            // Remove new message notification from channel name
             let channelName = localStorage.getItem('activeChannel');
-            let unreadChannels = _configureChannels(channelName, false);
+            let channelsWithUnreadMessages = _configureChannels(channelName, false);
 
-            if (unreadChannels == 0) {
+            if (channelsWithUnreadMessages == 0) {
                 let statusDiv = document.querySelector('#status');
                 statusDiv.innerText = '';
             }
@@ -190,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let request = new XMLHttpRequest();
 
      // Check if channel name is valid
+
         let channelName = rawChannelName.trim().match(/[A-Za-z0-9_]+/g).join('');
         if (channelName.length == 0) 
             return false;
@@ -197,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.append('channel', channelName);
 
      // Create new channel and notify and sync with server
+
         request.open('POST', '/manage_channels');
         request.onload = () => {
             let responsedata = JSON.parse(request.responseText);
@@ -211,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         request.send(data);
 
      // Hide form again after create channel request submission
+     
         let actionButton = document.querySelector('#enable_channel_edit');
         let createChannelSpan = document.querySelector('#channel_create_fields');
         createChannelSpan.className = 'hidden_form';
