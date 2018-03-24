@@ -57,25 +57,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function _configureChannels(channel, hasNewMessages) {
 
+        let unreadChannels = 0;
         let channelOptions = document.querySelectorAll('option');
+        let statusDiv = document.querySelector('#status');
 
         if (hasNewMessages == false) {
             for (i = 0; i < channelOptions.length; i++) {
                 let option = channelOptions[i];
                 if (option.text == channel + ' **') {
+                    unreadChannels++;
                     option.text = channel;
                 }
+                else if (option.text.search(/\*\*/) > 0) {
+                    unreadChannels++;
+                }
             }
+
         }
         else {
             for (i = 0; i < channelOptions.length; i++) {
                 let option = channelOptions[i];
                 if (option.text == channel) {
                     option.text = channel + ' **';
+                    unreadChannels++;
+                }
+                else if (option.text.search(/\*\*/) > 0) {
+                    unreadChannels++;
                 }
             }
         }
 
+        console.log(unreadChannels);
+
+        if (unreadChannels > 0) {
+            let statusDiv = document.querySelector('#status');
+            statusDiv.innerText = 'new messages';
+        }
+
+        return unreadChannels;
     }
     
  // Set up listener for delete message notifications and update local
@@ -153,8 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Remove new message notification from channel name
             let channelName = localStorage.getItem('activeChannel');
-            _configureChannels(channelName, false);
+            let unreadChannels = _configureChannels(channelName, false);
 
+            if (unreadChannels == 0) {
+                let statusDiv = document.querySelector('#status');
+                statusDiv.innerText = '';
+            }
         }
 
     })
