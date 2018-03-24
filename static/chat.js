@@ -87,8 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        console.log(unreadChannels);
-
         if (unreadChannels > 0) {
             let statusDiv = document.querySelector('#status');
             statusDiv.innerText = 'new messages';
@@ -263,8 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let channelName = rawChannelName.match(/[A-Za-z0-9_]+/g).join('');
         channelDisplay.innerText = '#' + channelName;
-
-        _configureChannels(channelName, false);
 
         localStorage.setItem('activeChannel', channelName);
 
