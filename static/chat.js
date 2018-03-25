@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     }
-    
+
  // Set up listener for delete message notifications and update local
  // chat client upon receipt of such a notification
 
@@ -93,9 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
 
-        if (document.body.scrollHeight > window.innerHeight &&
-            currentUser != data.sender) {
-            _configureChannels(data.channel, true)
+        if (currentUser != data.sender) {
+            _showNotification(data.channel, true)
         }
 
         let channelName = _activeChannel(currentUser);
@@ -132,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let currentUser = document.getElementById('current_user').innerText.trim();
             let channelName = _activeChannel(currentUser);
-            let channelsWithUnreadMessages = _configureChannels(channelName, false);
+            let channelsWithUnreadMessages = _showNotification(channelName, false);
 
             if (channelsWithUnreadMessages == 0) {
                 let statusDiv = document.querySelector('#status');
@@ -263,14 +262,14 @@ document.addEventListener('DOMContentLoaded', () => {
  // channels that don't have a scrollbar (i.e. have less than one page in 
  // content)
 
-    let chatContent = document.querySelector('.content');
-    chatContent.addEventListener('click', (evt) => {
+    window.addEventListener('click', (evt) => {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
         let channelName = _activeChannel(currentUser);
+        let chatContent = document.querySelector('.content');
 
         if (chatContent.clientHeight <= window.innerHeight) {
-            _configureChannels(channelName, false);
+            _showNotification(channelName, false);
         }
 
     });

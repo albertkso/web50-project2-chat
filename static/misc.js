@@ -26,7 +26,7 @@ function _activeChannel(username, channel=null) {
 // Display or hide unread message notifications
 //
 
-function _configureChannels(channel, hasNewMessages) {
+function _showNotification(channel, hasNewMessages) {
 
     let unreadChannels = 0;
     let channelSelector = document.querySelectorAll('option');
