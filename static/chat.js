@@ -54,55 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     }
-
- // Display or hide unread message notifications
-
-    function _configureChannels(channel, hasNewMessages) {
-
-        let unreadChannels = 0;
-        let channelSelector = document.querySelectorAll('option');
-        let statusDiv = document.querySelector('#status');
-
-     // Remove unread message notification from display
-
-        if (hasNewMessages == false) { 
-            for (i = 0; i < channelSelector.length; i++) {
-                let option = channelSelector[i];
-                if (option.text == channel + ' **') {
-                    option.text = channel;
-                }
-                else if (option.text.search(/\*\*/) > 0) {
-                    unreadChannels++;
-                }
-            }
-        }
-
-     // Add unread message notification ('**') to display
-
-        if (hasNewMessages == true) { 
-            for (i = 0; i < channelSelector.length; i++) {
-                let option = channelSelector[i];
-                if (option.text == channel) {
-                    option.text = channel + ' **';
-                    unreadChannels++;
-                }
-                else if (option.text.search(/\*\*/) > 0) {
-                    unreadChannels++;
-                }
-            }
-        }
-
-        if (unreadChannels > 0) {
-            statusDiv.innerText = 'new messages';
-        }
-        else {
-            statusDiv.innerText = '';
-        }
-
-     // Return the number of chat channels with unread messages
-        
-        return unreadChannels;
-    }
     
  // Set up listener for delete message notifications and update local
  // chat client upon receipt of such a notification
@@ -147,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             _configureChannels(data.channel, true)
         }
 
-        let channelName = localStorage.getItem('activeChannel');
+        let channelName = _activeChannel(currentUser);
         if (channelName != data.channel) {
             return;
         }
@@ -179,7 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
 
-            let channelName = localStorage.getItem('activeChannel');
+            let currentUser = document.getElementById('current_user').innerText.trim();
+            let channelName = _activeChannel(currentUser);
             let channelsWithUnreadMessages = _configureChannels(channelName, false);
 
             if (channelsWithUnreadMessages == 0) {
@@ -269,15 +221,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allChannels = document.querySelector('select');
         let rawChannelName = allChannels.options[allChannels.selectedIndex].innerText;
-        let sender = document.getElementById('current_user').innerText;
+        let currentUser = document.getElementById('current_user').innerText.trim();
         let channelDisplay = document.querySelector('#channel_name');
 
         let channelName = rawChannelName.match(/[A-Za-z0-9_]+/g).join('');
         channelDisplay.innerText = '#' + channelName;
 
-        localStorage.setItem('activeChannel', channelName);
+        _activeChannel(currentUser, channelName);
 
-        message_parameters = { channel: channelName, sender: sender };
+        message_parameters = { channel: channelName, sender: currentUser };
         socket.emit('client select channel', message_parameters);
 
     });
@@ -314,7 +266,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatContent = document.querySelector('.content');
     chatContent.addEventListener('click', (evt) => {
 
-        let channelName = localStorage.getItem('activeChannel');
+        let currentUser = document.getElementById('current_user').innerText.trim();
+        let channelName = _activeChannel(currentUser);
+
         if (chatContent.clientHeight <= window.innerHeight) {
             _configureChannels(channelName, false);
         }
