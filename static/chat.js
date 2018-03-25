@@ -152,7 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
      // Check if channel name is valid
 
-        let channelName = rawChannelName.trim().match(/[A-Za-z0-9_]+/g).join('');
+        let channelName = rawChannelName.trim().replace(/\s+/g, '_');
+        channelName = channelName.match(/[A-Za-z0-9_]+/g).join('');
         if (channelName.length == 0) 
             return false;
 
