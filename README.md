@@ -1,17 +1,19 @@
 # Project 2
 
-Web Programming with Python and JavaScript
+## Web Programming with Python and JavaScript ##
 
-## Key Files ##
+### Implementation Notes ###
 
+The key files of the chat web application are as follows.
 
 * chat.js - manages incoming and outgoing messages
 * init.js - loads saved application state (current schannel) upon http page load
 * misc.js - placeholder for functions
 * mustache.js - third party library template library https://mustache.github.io
 
+Mustache was used to try to separate the markup from the rest of the code.
 
-## Additional Functionality ##
+### Additional Functionality ###
 
 The ability to delete messages was implemented - a link is displayed for
 every eligible message. Also, message notifications were added, during
