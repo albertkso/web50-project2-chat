@@ -25,16 +25,4 @@
         src='{{ url_for("static", filename="init.js") }}'>
     </script>
 
-    <script 
-        type='text/javascript' 
-        src='{{ url_for("static", filename="logout.js") }}'>
-    </script>
-
-{% else %}
-
-    <script 
-        type='text/javascript' 
-        src='{{ url_for("static", filename="login.js") }}'>
-    </script>
-
 {% endif %}
