@@ -16,7 +16,8 @@ Mustache was used to try to separate the markup from the rest of the code.
 ### Additional Functionality ###
 
 The ability to delete messages was implemented - a link is displayed for
-every eligible message. Also, message notifications were added, during
-implementation and testing it became apparent there was a need for new
-message notifications.
+every eligible message. 
+
+Also, new message notifications were added. During implementation and testing
+it became apparent there was a need for new message notifications.
 
