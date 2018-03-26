@@ -13,17 +13,27 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div style='display:flex; justify-content: space-between;' class='msg_content'> 
                 <div> {{ content }} </div>
-                <div class='delete_msg'> delete  <span class='delete_box'> [X] </span> </div>
+                <div class='delete_msg'> delete <span class='delete_box'> [X] </span> </div>
             </div>
          </div>`;
+ 
+    function _generateMessageId(message) {
+
+     // Generate unique ID to be assigned to each message
+
+        let messageId = message.sender.replace(/\s+/g, '_') + '_' + 
+                        message.mesgDate.replace(/-/g, '') + '_' + 
+                        message.mesgTime.replace(/:/g, '');
+
+        return messageId;
+
+    }
 
     function _writeMessageToDOM(message) {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
         let messageDiv = document.createElement('div');
-        let messageId = message.sender.replace(/\s+/g, '_') + '_' + 
-                        message.mesgDate.replace(/-/g, '') + '_' + 
-                        message.mesgTime.replace(/:/g, '');
+        let messageId = _generateMessageId(message);
 
      // Assemble DIV and insert into DOM
 
@@ -45,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let deleteBox = document.querySelector('#' + messageId + ' .delete_box');
         deleteBox.addEventListener('click', (evt) => {
             let message_params = {
-                channel: message.channel,
-                username: message.sender,
-                date: message.mesgDate, 
-                time: message.mesgTime 
+                channel:  message.channel,
+                sender:   message.sender,
+                mesgDate: message.mesgDate, 
+                mesgTime: message.mesgTime 
             };
             socket.emit('client delete message', message_params);
         });
@@ -60,10 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('server broadcast delete message', data => {
 
-        let messageId =
-            data.username.replace(/\s+/g, '_') + '_' +
-            data.date.replace(/-/g, '') + '_' +
-            data.time.replace(/:/g, '');
+        let messageId = _generateMessageId(data);
 
         contentDiv = document.querySelector('#' + messageId + ' .msg_content');
         contentDiv.innerHTML = 
@@ -263,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
  // channels that don't have a scrollbar (i.e. have less than one page in 
  // content)
 
-    window.addEventListener('click', (evt) => {
+    window.addEventListener('click', () => {
 
         let currentUser = document.getElementById('current_user').innerText.trim();
         let channelName = _activeChannel(currentUser);

@@ -127,14 +127,12 @@ def handle_message(message):
 def handle_message(message):
 
     channel = message['channel']
-    message_date = message['date']
-    message_time = message['time']
-    sender = message['username']
+    message_date = message['mesgDate']
+    message_time = message['mesgTime']
+    sender = message['sender']
 
     for msg in chat_messages[channel]:
-        print(msg)
-        if message_date == msg['mesgDate'] and message_time == msg['mesgTime'] and \
-           sender == msg['sender']:
+        if message_date == msg['mesgDate'] and message_time == msg['mesgTime'] and sender == msg['sender']:
             msg['content'] = ''
 
     emit('server broadcast delete message', message, broadcast = True)
