@@ -17,6 +17,8 @@ To set up the web application do the following
 
 The key files of the chat web application are as follows.
 
+* `application.py` - the server component or controller (e.g. stores channels and
+   messages, forwards traffic between clients)
 * `main.html` - the main page of the web application
 * `chat.js` - manages channels and the sending and receiving and display of messages
 * `init.js` - loads saved application state (e.g. current channel) upon http page load
