@@ -33,15 +33,7 @@
 
 {% block signin %}
 
-    {% if session.user_signed_in %}
-
-        {% include '_logout.html' %}
-
-    {% else %}
-
-        {% include '_login.html' %}
-
-    {% endif %}
+    {% include '_login.html' %}
 
 {% endblock %}
 
