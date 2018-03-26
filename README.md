@@ -2,6 +2,17 @@
 
 ## Web Programming with Python and JavaScript ##
 
+### Setup ###
+
+To set up the web application do the following
+
+* create a new virtual environment
+* execute the following commands
+
+  pip install -r requirements.txt
+  export FLASK_APP=application.py
+  flask run
+
 ### Implementation Notes ###
 
 The key files of the chat web application are as follows.
