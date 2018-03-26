@@ -22,19 +22,19 @@
 
     <script 
         type='text/javascript' 
-        src='{{ url_for("static", filename="loader.js") }}'>
+        src='{{ url_for("static", filename="init.js") }}'>
     </script>
 
     <script 
         type='text/javascript' 
-        src='{{ url_for("static", filename="userlogout.js") }}'>
+        src='{{ url_for("static", filename="logout.js") }}'>
     </script>
 
 {% else %}
 
     <script 
         type='text/javascript' 
-        src='{{ url_for("static", filename="userlogin.js") }}'>
+        src='{{ url_for("static", filename="login.js") }}'>
     </script>
 
 {% endif %}
