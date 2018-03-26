@@ -17,12 +17,13 @@ To set up the web application do the following
 
 The key files of the chat web application are as follows.
 
-* `chat.js` - manages incoming and outgoing messages
+* `main.html` - the main page of the web application
+* `chat.js` - manages channels and the sending and receiving and display of messages
 * `init.js` - loads saved application state (current schannel) upon http page load
 * `misc.js` - placeholder for functions
 * `mustache.js` - third party library template library https://mustache.github.io
 
-Mustache was used to try to separate the markup from the rest of the code.
+Mustache was used to provide some separation of markup from the rest of the code.
 
 ### Additional Functionality ###
 
