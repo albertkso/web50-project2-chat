@@ -198,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
  // Define event handler to handle client send message requests
 
-    let sendMessageButton = document.querySelector('#send_message');
-    sendMessageButton.addEventListener('click', (evt) => {
+    let sendMessageForm = document.querySelector('#message_form');
+    sendMessageForm.addEventListener('submit', (evt) => {
 
         let allChannels = document.querySelector('select');
         let channelName = allChannels.options[allChannels.selectedIndex].innerText.trim();
