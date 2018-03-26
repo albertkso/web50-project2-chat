@@ -25,7 +25,7 @@ The key files of the chat web application are as follows.
 
 Mustache was used to provide some separation of markup from the rest of the code.
 
-### Additional Functionality ###
+### Additional Functionality (Personal Touch) ###
 
 The ability to delete messages was implemented - a link is displayed for
 every eligible message. 
@@ -33,3 +33,6 @@ every eligible message.
 Also, new message notifications were added. During implementation and testing
 it became apparent there was a need for new message notifications.
 
+Some bits were added to try to enhance user experience in the remaining time
+available (for example scrolling the chat window to the bottom upon message
+send).
