@@ -6,21 +6,21 @@
 
 To set up the web application do the following
 
-* create a new virtual environment
+* create a new virtual environment (for example through `mkvirtualenv`)
 * execute the following commands
-
+```
   pip install -r requirements.txt
   export FLASK_APP=application.py
   flask run
-
+```
 ### Implementation Notes ###
 
 The key files of the chat web application are as follows.
 
-* chat.js - manages incoming and outgoing messages
-* init.js - loads saved application state (current schannel) upon http page load
-* misc.js - placeholder for functions
-* mustache.js - third party library template library https://mustache.github.io
+* `chat.js` - manages incoming and outgoing messages
+* `init.js` - loads saved application state (current schannel) upon http page load
+* `misc.js` - placeholder for functions
+* `mustache.js` - third party library template library https://mustache.github.io
 
 Mustache was used to try to separate the markup from the rest of the code.
 
