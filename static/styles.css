@@ -1,0 +1,92 @@
+html {
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+body {
+  font-family: 'Hind Vadodara', sans-serif; }
+  body h1 {
+    font-size: 120%;
+    margin: 0; }
+  body h2 {
+    margin: 0;
+    font-size: 110%; }
+  body button, body select {
+    font-size: 100%; }
+  body select {
+    width: 10rem; }
+  body input {
+    width: 10rem;
+    font-size: 95%; }
+
+header {
+  position: fixed;
+  top: 0;
+  height: 3rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  background-color: darkcyan;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+footer {
+  position: fixed;
+  padding: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: solid 1px black; }
+  footer input {
+    height: 2.5em;
+    width: 100%;
+    padding: 0 1rem;
+    background-color: #eeeeee; }
+  footer input:focus {
+    border: none; }
+  footer button {
+    display: none; }
+
+#status {
+  display: inline-block;
+  margin: 0.1rem;
+  background-color: cyan; }
+
+.side {
+  position: fixed;
+  top: 3rem;
+  width: 100%;
+  padding: 0 1rem;
+  background-color: lightgray;
+  display: flex;
+  justify-content: space-between; }
+
+.hidden_form {
+  display: none; }
+
+.msg_container {
+  padding: 0.25rem 1rem;
+  margin: 0; }
+  .msg_container .msg_sender {
+    font-weight: bold; }
+  .msg_container .msg_time {
+    font-size: 80%; }
+  .msg_container .msg_content {
+    font-size: 95%; }
+  .msg_container [class*="delete_"] {
+    visibility: hidden; }
+
+.msg_container:hover {
+  background-color: #e6e6e6; }
+  .msg_container:hover [class*="delete_"] {
+    visibility: visible; }
+  .msg_container:hover .delete_box:hover {
+    background-color: yellow; }
+
+.content {
+  padding: 5rem 0 6.5rem 0; }
+
+/*# sourceMappingURL=styles.css.map */
