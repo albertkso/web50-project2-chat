@@ -19,7 +19,7 @@ The key files of the chat web application are as follows.
 
 * `main.html` - the main page of the web application
 * `chat.js` - manages channels and the sending and receiving and display of messages
-* `init.js` - loads saved application state (current schannel) upon http page load
+* `init.js` - loads saved application state (e.g. current channel) upon http page load
 * `misc.js` - placeholder for functions
 * `mustache.js` - third party library template library https://mustache.github.io
 
